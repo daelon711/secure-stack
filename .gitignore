@@ -2,9 +2,8 @@
 .env
 mysql/.env
 
-# ---- User-uploaded content (avatars etc, shouldn't be in git) ----
+# ---- User-uploaded content (avatars etc) ----
 src/uploads/*
-!src/uploads/.gitkeep
 
 # ---- OS cruft ----
 .DS_Store
@@ -16,7 +15,7 @@ desktop.ini
 .idea/
 *.swp
 
-# ---- PHP tooling (if you add Composer later) ----
+# ---- PHP tooling  ----
 vendor/
 composer.lock
 
