@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Old backups
+Disallow: /db_backup/
+Disallow: /backups/
+
+# Staging
+Disallow: /staging/
+Disallow: /debug/
+
+# Private uploads
+Disallow: /uploads/private/

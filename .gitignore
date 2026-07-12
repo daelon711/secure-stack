@@ -1,0 +1,24 @@
+# ---- Secrets ----
+.env
+mysql/.env
+
+# ---- User-uploaded content (avatars etc, shouldn't be in git) ----
+src/uploads/*
+!src/uploads/.gitkeep
+
+# ---- OS cruft ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Editor/IDE ----
+.vscode/
+.idea/
+*.swp
+
+# ---- PHP tooling (if you add Composer later) ----
+vendor/
+composer.lock
+
+# ---- Logs ----
+*.log
