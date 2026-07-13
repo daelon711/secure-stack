@@ -4,16 +4,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 :root {
-  --honey: #f4a72a;
-  --honey-dark: #c8780a;
-  --honey-light: #fde68a;
+  --dirty-pink: #a15056;
+  --dirty-pink-dark: #9e7030;
+  --dirty-pink-light: #fde68a;
   --cream: #fffbeb;
-  --bark: #7c4a1e;
+  --bark: #912e4b;
   --bark-light: #a0622a;
   --leaf: #4a7c59;
   --sky: #bae6fd;
-  --red: #e74c3c;
+  --bright-red: #d95c4e;
   --shadow: rgba(124, 74, 30, 0.18);
+  --blue: #21739d;
 }
 
 *,
@@ -55,14 +56,14 @@ body {
 
 /* ── Layout ── */
 .container {
-  max-width: 860px;
+  max-width: 50rem;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 /* ── Dashboard grid (index.php) ── */
 .container:has(.dashboard-grid) {
-  max-width: 1240px;
+  max-width: 100rem;
 }
 
 .dashboard-grid {
@@ -96,9 +97,9 @@ body {
   margin: 0 0 0.6rem;
 }
 
-/* keep the leaderboard card height predictable regardless of entry count */
+/* keep the leaderboard card height pbright-redictable regardless of entry count */
 .board-maze {
-  max-height: 340px;
+  max-height: 10rem;
   overflow-y: auto;
 }
 
@@ -125,7 +126,7 @@ body {
   grid-template-rows: repeat(9, 1fr);
   width: 288px;
   height: 288px;
-  border: 3px solid var(--accent, var(--honey));
+  border: 3px solid var(--accent, var(--dirty-pink));
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
@@ -141,7 +142,7 @@ body {
   color: var(--bark);
   cursor: pointer;
   user-select: none;
-  border: 1px solid var(--honey-light);
+  border: 1px solid var(--dirty-pink-light);
   background: #fff;
   transition: 0.15s;
 }
@@ -151,7 +152,7 @@ body {
   cursor: default;
 }
 .sudoku-cell.selected {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
 }
 .sudoku-cell:not(.given):hover {
   background: #fff7e0;
@@ -167,7 +168,7 @@ body {
   width: 32px;
   height: 28px;
   border-radius: 7px;
-  border: 2px solid var(--honey);
+  border: 2px solid var(--dirty-pink);
   background: #fff;
   color: var(--bark);
   font-weight: 700;
@@ -176,17 +177,17 @@ body {
   transition: background 0.15s;
 }
 .sudoku-num-btn:hover {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
 }
 .sudoku-erase-btn {
-  border-color: var(--red);
-  color: var(--red);
+  border-color: var(--bright-red);
+  color: var(--bright-red);
   margin-top: 0.2rem;
 }
 
 /* ── Header ── */
 header {
-  background: var(--honey-dark);
+  background: var(--dirty-pink-dark);
   padding: 0.9rem 0;
   box-shadow: 0 4px 16px var(--shadow);
   position: sticky;
@@ -209,7 +210,7 @@ header .inner {
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  color: var(--honey-light);
+  color: var(--dirty-pink-light);
   gap: 0.5rem;
   white-space: nowrap;
   transition:
@@ -232,8 +233,8 @@ header .inner {
 
 nav {
   display: flex;
-  gap: 0.3rem;
-  align-items: center;
+  gap: 1rem;
+  align-items: space-between;
   flex-wrap: nowrap;
 }
 nav a {
@@ -265,7 +266,7 @@ nav a.logout {
   border-radius: 20px;
   box-shadow:
     0 6px 28px var(--shadow),
-    0 0 0 3px var(--honey-light);
+    0 0 0 3px var(--dirty-pink-light);
   padding: 2rem;
   margin-bottom: 1.5rem;
   position: relative;
@@ -280,9 +281,9 @@ nav a.logout {
   height: 5px;
   background: linear-gradient(
     90deg,
-    var(--honey),
-    var(--honey-dark),
-    var(--honey)
+    var(--dirty-pink),
+    var(--dirty-pink-dark),
+    var(--dirty-pink)
   );
 }
 
@@ -290,7 +291,7 @@ nav a.logout {
 .page-title {
   font-family: "Luckiest Guy", cursive;
   font-size: 2rem;
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   margin: 2rem 0 1.2rem;
   letter-spacing: 0.5px;
   font-weight: 600;
@@ -318,7 +319,7 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 2.5px solid var(--honey-light);
+  border: 2.5px solid var(--dirty-pink-light);
   border-radius: 12px;
   font-family: "Outfit", sans-serif;
   font-size: 1rem;
@@ -331,8 +332,8 @@ textarea {
 }
 input:focus,
 textarea:focus {
-  border-color: var(--honey);
-  box-shadow: 0 0 0 3px var(--honey-light);
+  border-color: var(--dirty-pink);
+  box-shadow: 0 0 0 3px var(--dirty-pink-light);
 }
 
 /* ── Buttons ── */
@@ -360,11 +361,11 @@ textarea:focus {
 }
 
 .btn-primary {
-  background: var(--honey);
+  background: var(--dirty-pink);
   color: #fff;
 }
 .btn-danger {
-  background: var(--red);
+  background: var(--bright-red);
   color: #fff;
 }
 .btn-success {
@@ -373,8 +374,8 @@ textarea:focus {
 }
 .btn-outline {
   background: transparent;
-  border: 2.5px solid var(--honey);
-  color: var(--honey-dark);
+  border: 2.5px solid var(--dirty-pink);
+  color: var(--dirty-pink-dark);
 }
 .btn-sm {
   padding: 0.35rem 0.9rem;
@@ -405,9 +406,9 @@ textarea:focus {
   border: 1.5px solid #86efac;
 }
 .alert-info {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   color: var(--bark);
-  border: 1.5px solid var(--honey);
+  border: 1.5px solid var(--dirty-pink);
 }
 
 /* ── Auth pages ── */
@@ -423,7 +424,7 @@ textarea:focus {
   border-radius: 24px;
   box-shadow:
     0 12px 48px var(--shadow),
-    0 0 0 3px var(--honey-light);
+    0 0 0 3px var(--dirty-pink-light);
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
@@ -440,9 +441,9 @@ textarea:focus {
   height: 6px;
   background: linear-gradient(
     90deg,
-    var(--honey),
-    var(--honey-dark),
-    var(--honey)
+    var(--dirty-pink),
+    var(--dirty-pink-dark),
+    var(--dirty-pink)
   );
 }
 @keyframes popIn {
@@ -458,10 +459,10 @@ textarea:focus {
 .auth-title {
   font-family: "Luckiest Guy", cursive;
   font-size: 2.2rem;
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   text-align: center;
   margin-bottom: 0.3rem;
-  text-shadow: 1px 2px 0 var(--honey-light);
+  text-shadow: 1px 2px 0 var(--dirty-pink-light);
 }
 .auth-bee {
   font-size: 3rem;
@@ -485,7 +486,7 @@ textarea:focus {
   font-size: 0.9rem;
 }
 .auth-switch a {
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   font-weight: 700;
 }
 
@@ -515,7 +516,7 @@ textarea:focus {
   background: var(--cream);
   border-radius: 14px;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--honey-light);
+  border: 2px solid var(--dirty-pink-light);
   transition: border-color 0.2s;
   animation: slideIn 0.25s ease;
 }
@@ -530,7 +531,7 @@ textarea:focus {
   }
 }
 .note-item:hover {
-  border-color: var(--honey);
+  border-color: var(--dirty-pink);
 }
 
 .note-text {
@@ -550,7 +551,7 @@ textarea:focus {
 }
 .note-delete:hover {
   opacity: 1;
-  color: var(--red);
+  color: var(--bright-red);
 }
 
 .note-empty {
@@ -577,7 +578,7 @@ textarea:focus {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 4px solid var(--honey);
+  border: 4px solid var(--dirty-pink);
   object-fit: cover;
   box-shadow: 0 4px 16px var(--shadow);
   margin-bottom: 0.75rem;
@@ -586,8 +587,8 @@ textarea:focus {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  background: var(--honey-light);
-  border: 4px solid var(--honey);
+  background: var(--dirty-pink-light);
+  border: 4px solid var(--dirty-pink);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -615,7 +616,11 @@ table {
   font-size: 0.92rem;
 }
 th {
-  background: linear-gradient(135deg, var(--honey), var(--honey-dark));
+  background: linear-gradient(
+    135deg,
+    var(--dirty-pink),
+    var(--dirty-pink-dark)
+  );
   color: #fff;
   font-family: "Luckiest Guy", cursive;
   font-weight: 500;
@@ -625,7 +630,7 @@ th {
 }
 td {
   padding: 0.7rem 1rem;
-  border-bottom: 1.5px solid var(--honey-light);
+  border-bottom: 1.5px solid var(--dirty-pink-light);
   vertical-align: middle;
 }
 td span {
@@ -650,7 +655,7 @@ tr:hover td {
   color: #b91c1c;
 }
 .badge-admin {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   color: var(--bark);
 }
 
@@ -678,7 +683,7 @@ tr:hover td {
   color: #6b7280;
 }
 .log-ADMIN_TOGGLE {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   color: var(--bark);
 }
 .log-AVATAR_UPLOAD {
@@ -704,15 +709,15 @@ tr:hover td {
   color: var(--bark-light);
   font-size: 0.88rem;
 }
-.honey-divider {
+.dirty-pink-divider {
   border: none;
-  border-top: 2px dashed var(--honey-light);
+  border-top: 2px dashed var(--dirty-pink-light);
   margin: 1.5rem 0;
 }
 
 /* ── Chat ── */
 .chat-messages {
-  max-height: 420px;
+  max-height: 30rem;
   overflow-y: auto;
   padding: 0.5rem;
   display: flex;
@@ -727,20 +732,20 @@ tr:hover td {
   animation: slideIn 0.25s ease;
 }
 .chat-bubble-avatar {
-  width: 36px;
-  height: 36px;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   flex-shrink: 0;
-  border: 2px solid var(--honey);
+  border: 2px solid var(--dirty-pink);
 }
 .chat-bubble-body {
   background: var(--cream);
-  border: 2px solid var(--honey-light);
+  border: 2px solid var(--dirty-pink-light);
   border-radius: 14px;
   padding: 0.6rem 0.9rem;
   max-width: 80%;
@@ -748,7 +753,7 @@ tr:hover td {
 .chat-bubble-name {
   font-weight: 700;
   font-size: 0.82rem;
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
 }
 .chat-bubble-text {
   font-size: 0.92rem;
@@ -778,7 +783,7 @@ tr:hover td {
   align-items: center;
   gap: 0.8rem;
   padding: 0.65rem 0.5rem;
-  border-bottom: 1.5px solid var(--honey-light);
+  border-bottom: 1.5px solid var(--dirty-pink-light);
   transition: 0.15s;
 }
 .leaderboard-item:last-child {
@@ -796,7 +801,7 @@ tr:hover td {
   flex-shrink: 0;
 }
 .leaderboard-rank.gold {
-  color: var(--honey);
+  color: var(--dirty-pink);
 }
 .leaderboard-rank.silver {
   color: #94a3b8;
@@ -811,16 +816,16 @@ tr:hover td {
 }
 .leaderboard-score {
   font-weight: 700;
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   font-size: 1.05rem;
 }
 
-/* ── Honeypot log types ── */
-.log-HONEYPOT_FAKEADMIN_LOGIN {
+/* ── dirty-pinkpot log types ── */
+.log-dirty-pinkPOT_FAKEADMIN_LOGIN {
   background: #fef3c7;
   color: #92400e;
 }
-.log-HONEYPOT_L2_LOGIN {
+.log-dirty-pinkPOT_L2_LOGIN {
   background: #fee2e2;
   color: #991b1b;
 }
@@ -832,7 +837,7 @@ tr:hover td {
   background: #fef3c7;
   color: #92400e;
 }
-.log-honeyPotAdmin {
+.log-dirty-pinkPotAdmin {
   background: #fee2e2;
   color: #991b1b;
 }
@@ -841,8 +846,8 @@ tr:hover td {
   color: #7c3aed;
 }
 
-/* ── Honeypot decoration ── */
-.honeycomb-deco {
+/* ── dirty-pinkpot decoration ── */
+.dirty-pinkcomb-deco {
   position: fixed;
   right: -40px;
   top: 30%;
@@ -863,8 +868,8 @@ tr:hover td {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--honey);
-  border: 3px solid var(--honey-light);
+  background: var(--dirty-pink);
+  border: 3px solid var(--dirty-pink-light);
   box-shadow: 0 8px 22px rgba(124, 74, 30, 0.28);
   display: flex;
   align-items: center;
@@ -880,7 +885,7 @@ tr:hover td {
 .pooh-chat-bubble:hover {
   transform: translateY(-3px) scale(1.07);
   box-shadow: 0 12px 30px rgba(124, 74, 30, 0.38);
-  background: var(--honey-dark);
+  background: var(--dirty-pink-dark);
 }
 
 .pooh-chat-bubble:hover img {
@@ -902,7 +907,7 @@ tr:hover td {
   width: 330px;
   height: 430px;
   background: #fff;
-  border: 3px solid var(--honey-light);
+  border: 3px solid var(--dirty-pink-light);
   border-radius: 20px;
   box-shadow: 0 12px 36px rgba(124, 74, 30, 0.28);
   overflow: hidden;
@@ -914,7 +919,7 @@ tr:hover td {
 }
 
 .pooh-chat-header {
-  background: var(--honey-dark);
+  background: var(--dirty-pink-dark);
   color: white;
   padding: 0.8rem 1rem;
   display: flex;
@@ -946,12 +951,12 @@ tr:hover td {
 }
 
 .pooh-msg.bot {
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   color: var(--bark);
 }
 
 .pooh-msg.user {
-  background: var(--honey);
+  background: var(--dirty-pink);
   color: white;
   margin-left: auto;
 }
@@ -960,7 +965,7 @@ tr:hover td {
   display: flex;
   gap: 0.4rem;
   padding: 0.7rem;
-  border-top: 2px solid var(--honey-light);
+  border-top: 2px solid var(--dirty-pink-light);
   background: white;
 }
 
@@ -972,7 +977,7 @@ tr:hover td {
 .pooh-chat-form button {
   border: none;
   border-radius: 999px;
-  background: var(--honey);
+  background: var(--dirty-pink);
   color: white;
   font-weight: 700;
   padding: 0 0.9rem;
@@ -992,7 +997,7 @@ tr:hover td {
   padding: 0.65rem 0.9rem;
   border-radius: 18px 18px 4px 18px;
   box-shadow: 0 8px 20px rgba(124, 74, 30, 0.22);
-  border: 2px solid var(--honey-light);
+  border: 2px solid var(--dirty-pink-light);
   font-size: 0.85rem;
   font-weight: 700;
   white-space: nowrap;
@@ -1007,8 +1012,8 @@ tr:hover td {
   width: 14px;
   height: 14px;
   background: #fff;
-  border-right: 2px solid var(--honey-light);
-  border-bottom: 2px solid var(--honey-light);
+  border-right: 2px solid var(--dirty-pink-light);
+  border-bottom: 2px solid var(--dirty-pink-light);
   transform: rotate(-45deg);
 }
 
@@ -1075,9 +1080,9 @@ tr:hover td {
 .mh-hero-title {
   font-family: "Luckiest Guy", cursive;
   font-size: clamp(2rem, 6vw, 3.6rem);
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   text-shadow:
-    3px 4px 0 var(--honey-light),
+    3px 4px 0 var(--dirty-pink-light),
     5px 7px 0 rgba(124, 74, 30, 0.15);
   line-height: 1.1;
   letter-spacing: 1px;
@@ -1115,7 +1120,7 @@ tr:hover td {
   padding: 0.9rem 1.2rem;
   box-shadow: 0 4px 16px var(--shadow);
   font-size: 0.88rem;
-  border-left: 5px solid var(--honey);
+  border-left: 5px solid var(--dirty-pink);
 }
 
 .mh-response-card.sqli-fake {
@@ -1164,13 +1169,13 @@ tr:hover td {
 }
 
 .mh-response-card.sqli-tigger {
-  border-left-color: var(--honey);
+  border-left-color: var(--dirty-pink);
   text-align: center;
   padding: 1.2rem;
 }
 .mh-response-card.sqli-tigger .tigger-msg {
   font-family: "Luckiest Guy", cursive;
-  color: var(--honey-dark);
+  color: var(--dirty-pink-dark);
   font-size: 1.1rem;
 }
 .mh-response-card.sqli-tigger .tigger-sub {
@@ -1191,7 +1196,7 @@ tr:hover td {
 }
 .mh-response-card.xss-blocked .xss-oops code {
   font-family: monospace;
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   padding: 0.1rem 0.4rem;
   border-radius: 5px;
   font-size: 0.88rem;
@@ -1200,7 +1205,7 @@ tr:hover td {
 .mh-response-card.xss-blocked .xss-payload {
   font-family: monospace;
   font-size: 0.8rem;
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   word-break: break-all;
@@ -1223,12 +1228,12 @@ tr:hover td {
 }
 
 .mh-response-card.echo-card {
-  border-left-color: var(--honey);
+  border-left-color: var(--dirty-pink);
 }
 .mh-response-card.echo-card .echo-val {
   font-family: monospace;
   font-size: 0.82rem;
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   word-break: break-all;
@@ -1247,7 +1252,7 @@ tr:hover td {
 .mh-bubble {
   position: absolute;
   background: #fff;
-  border: 3px solid var(--honey);
+  border: 3px solid var(--dirty-pink);
   border-radius: 50%;
   box-shadow:
     0 4px 18px var(--shadow),
@@ -1268,8 +1273,8 @@ tr:hover td {
   transform: scale(1.04) rotate(-1deg) !important;
   box-shadow:
     0 8px 28px var(--shadow),
-    0 0 0 4px var(--honey-light);
-  border-color: var(--honey-dark);
+    0 0 0 4px var(--dirty-pink-light);
+  border-color: var(--dirty-pink-dark);
   z-index: 10;
 }
 .mh-bubble.small {
@@ -1297,7 +1302,7 @@ tr:hover td {
 .mh-bubble input[type="text"],
 .mh-bubble input[type="password"] {
   width: 88%;
-  border: 2px solid var(--honey-light);
+  border: 2px solid var(--dirty-pink-light);
   border-radius: 999px;
   padding: 0.3rem 0.6rem;
   font-size: 0.72rem;
@@ -1310,7 +1315,7 @@ tr:hover td {
   transition: border-color 0.18s;
 }
 .mh-bubble input:focus {
-  border-color: var(--honey-dark);
+  border-color: var(--dirty-pink-dark);
   background: #fff;
 }
 
@@ -1338,7 +1343,7 @@ tr:hover td {
   transform: translateX(-50%);
   width: 12px;
   height: 18px;
-  background: var(--honey-light);
+  background: var(--dirty-pink-light);
   border-radius: 0 0 50% 50%;
   opacity: 0.7;
 }
@@ -1352,7 +1357,11 @@ tr:hover td {
 .mh-submit-blob {
   font-family: "Luckiest Guy", cursive;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, var(--honey) 0%, var(--honey-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--dirty-pink) 0%,
+    var(--dirty-pink-dark) 100%
+  );
   color: #fff;
   border: none;
   padding: 1.2rem 2rem;

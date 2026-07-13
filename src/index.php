@@ -81,8 +81,8 @@ $stmt = db()->prepare('SELECT MAX(score) as best, MIN(time_sec) as fastest, COUN
 $stmt->execute([$user['id'], 'sudoku']);
 $sudokuPersonal = $stmt->fetch();
 
-// Sudoku puzzle: pulled from the free Dosuku API (see config.php),
-// falling back to a hardcoded puzzle if the API is unreachable.
+// Sudoku puzzle: pulled from the free Dosuku API ( config.php)
+// falling back to a hardcoded puzzle if the API is unreachable
 $sudokuGame = get_sudoku_api();
 $puzzle     = $sudokuGame['puzzle'];
 $solution   = $sudokuGame['solution'];
@@ -159,7 +159,6 @@ $messages = array_reverse($stmt->fetchAll());
 
                     <div style="margin-top:1rem">
                         <button onclick="resetGame()" class="btn btn-outline btn-sm">New Maze</button>
-                        <a href="#leaderboard" class="btn btn-primary btn-sm" style="margin-left:0.5rem">Leaderboard</a>
                     </div>
                 </div>
             </section>
