@@ -118,7 +118,7 @@ $stmt = db()->prepare(
 $stmt->execute();
 $messages = array_reverse($stmt->fetchAll());
 ?>
-<div class="container" style="padding-top:1.5rem">
+<div class="container dashboard-container">
 
     <?php if ($error): ?>
         <div class="alert alert-error"><?= h($error) ?></div>
@@ -132,32 +132,31 @@ $messages = array_reverse($stmt->fetchAll());
             <!-- ============ MAZE ============ -->
             <section id="games" class="dash-card-section">
                 <h1 class="page-title page-title-sm">Maze</h1>
-                <div class="card" style="text-align:center">
-                    <canvas id="mazeCanvas" width="360" height="360"
-                        style="border:3px solid var(--accent);border-radius:12px;max-width:100%;cursor:crosshair;background:#fff"></canvas>
+                <div class="card card-center">
+                    <canvas id="mazeCanvas" width="360" height="360"></canvas>
 
-                    <div id="gameStatus" style="margin-top:1rem;font-weight:600;font-size:1.1rem">
+                    <div id="gameStatus" class="game-status">
                         Press any arrow key to start!
                     </div>
 
-                    <div style="display:flex;justify-content:center;gap:2rem;margin-top:0.8rem">
+                    <div class="game-stats-row">
                         <div>
-                            <span style="font-size:0.85rem;color:var(--muted)">Time</span>
-                            <div id="timer" style="font-size:1.5rem">0.0s</div>
+                            <span class="stat-label">Time</span>
+                            <div id="timer" class="stat-value">0.0s</div>
                         </div>
                         <div>
-                            <span style="font-size:0.85rem;color:var(--muted)">Moves</span>
-                            <div id="moves" style="font-size:1.5rem">0</div>
+                            <span class="stat-label">Moves</span>
+                            <div id="moves" class="stat-value">0</div>
                         </div>
                     </div>
 
                     <?php if ($mazePersonal['best']): ?>
-                        <div style="margin-top:0.6rem;font-size:0.8rem;color:var(--muted)">
+                        <div class="personal-best">
                             Best: <?= (int)$mazePersonal['best'] ?> pts (<?= round($mazePersonal['fastest'], 1) ?>s)
                         </div>
                     <?php endif; ?>
 
-                    <div style="margin-top:1rem">
+                    <div class="mt2">
                         <button onclick="resetGame()" class="btn btn-outline btn-sm">New Maze</button>
                     </div>
                 </div>
@@ -169,22 +168,22 @@ $messages = array_reverse($stmt->fetchAll());
 
                 <div class="card board-maze">
                     <?php if (empty($boards['maze'])): ?>
-                        <div style="text-align:center;padding:2rem;color:var(--muted)">
+                        <div class="empty-state">
                             No scores yet! Be the first to play.
                         </div>
                     <?php else: ?>
                         <ol class="leaderboard-list">
                             <?php foreach ($boards['maze'] as $i => $entry): ?>
-                                <li class="leaderboard-item" <?php if ((int)$entry['user_id'] === (int)$user['id']): ?>style="background:var(--highlight);border-radius:10px;padding:0.75rem 1rem" <?php endif; ?>>
+                                <li class="leaderboard-item<?= ((int)$entry['user_id'] === (int)$user['id']) ? ' leaderboard-item--you' : '' ?>">
                                     <span class="leaderboard-rank"><?= $i + 1 ?></span>
                                     <span class="leaderboard-name">
                                         <?= h($entry['username']) ?>
                                         <?php if ((int)$entry['user_id'] === (int)$user['id']): ?>
-                                            <span style="font-size:0.75rem;color:var(--muted)">(you)</span>
+                                            <span class="you-tag">(you)</span>
                                         <?php endif; ?>
                                     </span>
                                     <span class="leaderboard-score"><?= (int)$entry['score'] ?> pts</span>
-                                    <span style="font-size:0.8rem;color:var(--muted);margin-left:0.5rem"><?= round($entry['time_sec'], 1) ?>s</span>
+                                    <span class="leaderboard-time"><?= round($entry['time_sec'], 1) ?>s</span>
                                 </li>
                             <?php endforeach; ?>
                         </ol>
@@ -194,12 +193,12 @@ $messages = array_reverse($stmt->fetchAll());
 
         </div>
 
-        <!-- ===== CENTER COLUMN: Future Self Notes ===== -->
+        <!-- ===== CENTER COLUMN ===== -->
         <div class="dash-col dash-col-center">
 
             <!-- ============ NOTES ============ -->
             <section id="notes" class="dash-card-section dash-card-tall">
-                <h1 class="page-title">Future Self Notes</h1>
+                <h1 class="page-title">Today I learned ... </h1>
 
                 <div class="card">
                     <form method="POST" action="/index.php" class="note-form">
@@ -217,7 +216,7 @@ $messages = array_reverse($stmt->fetchAll());
                                 <li class="note-item">
                                     <span class="note-text"><?= h($note['title']) ?></span>
 
-                                    <form method="POST" action="/index.php" style="display:contents">
+                                    <form method="POST" action="/index.php" class="display-contents">
                                         <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
                                         <input type="hidden" name="action" value="delete" />
                                         <input type="hidden" name="note_id" value="<?= $note['id'] ?>" />
@@ -239,24 +238,22 @@ $messages = array_reverse($stmt->fetchAll());
             <section id="sudoku" class="dash-card-section">
                 <h1 class="page-title page-title-sm">Sudoku</h1>
 
-                <div class="card" style="text-align:center">
+                <div class="card card-center">
                     <div class="sudoku-board-wrap">
                         <div id="sudokuGrid" class="sudoku-grid"></div>
                         <div id="sudokuPalette" class="sudoku-palette"></div>
                     </div>
-                    <div id="sudokuStatus" style="margin-top:0.8rem;font-weight:600">
-
-                    </div>
-                    <div style="margin-top:0.5rem;display:flex;justify-content:center;gap:1.2rem;font-size:0.9rem">
+                    <div id="sudokuStatus" class="mt-08 sudoku-status"></div>
+                    <div class="sudoku-stats-row">
                         <span>Time: <span id="sudokuTimer">0.0s</span></span>
                         <span>Strikes: <span id="sudokuStrikes">0</span>/3</span>
                     </div>
-                    <div style="margin-top:0.8rem">
+                    <div class="mt-08">
                         <button onclick="checkSudoku()" class="btn btn-primary btn-sm">Check</button>
-                        <button onclick="loadNewPuzzle()" class="btn btn-outline btn-sm" style="margin-left:0.5rem">Refresh</button>
+                        <button onclick="loadNewPuzzle()" class="btn btn-outline btn-sm ml-08">Refresh</button>
                     </div>
-                    <div style="margin-top:0.6rem;font-size:0.8rem;color:var(--muted)">
-                        <p class="page-subtitle" id="sudokuDifficulty">difficulty: <?= h($difficulty) ?></p>
+                    <div class="sudoku-info">
+                        <p class="page-subtitle" id="sudokuDifficulty">difficulty: <span><?= h($difficulty) ?></span></p>
 
                         <p>You've completed <?= (int)($sudokuPersonal['completed'] ?? 0) ?> sudoku game<?= ((int)($sudokuPersonal['completed'] ?? 0) === 1) ? '' : 's' ?>.</p>
                     </div>
@@ -274,7 +271,7 @@ $messages = array_reverse($stmt->fetchAll());
                 <div class="card">
                     <div class="chat-messages" id="chatMessages">
                         <?php if (empty($messages)): ?>
-                            <div style="text-align:center;padding:2rem;color:var(--muted)">
+                            <div class="empty-state">
                                 No messages yet. Say something!
                             </div>
                         <?php else: ?>
@@ -282,8 +279,7 @@ $messages = array_reverse($stmt->fetchAll());
                                 <div class="chat-bubble">
                                     <div class="chat-bubble-avatar">
                                         <?php if (!empty($msg['avatar']) && file_exists(UPLOAD_DIR . $msg['avatar'])): ?>
-                                            <img src="<?= h(UPLOAD_URL . $msg['avatar']) ?>"
-                                                style="width:32px;height:32px;border-radius:50%;object-fit:cover" />
+                                            <img src="<?= h(UPLOAD_URL . $msg['avatar']) ?>" class="chat-avatar-img" />
                                         <?php endif; ?>
                                     </div>
                                     <div class="chat-bubble-body">
@@ -299,7 +295,7 @@ $messages = array_reverse($stmt->fetchAll());
 
                     <form method="POST" action="/chat.php" class="chat-form">
                         <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
-                        <div style="position:absolute;left:-9999px" aria-hidden="true">
+                        <div class="hp-field" aria-hidden="true">
                             <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
                         </div>
                         <input type="text" name="content" placeholder="Type a message..." maxlength="500" required
@@ -339,17 +335,17 @@ $messages = array_reverse($stmt->fetchAll());
         var container = document.querySelector('.board-' + game);
         if (!container) return;
         if (!entries || !entries.length) {
-            container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">No scores yet! Be the first to play.</div>';
+            container.innerHTML = '<div class="empty-state">No scores yet! Be the first to play.</div>';
             return;
         }
         var html = '<ol class="leaderboard-list">';
         entries.forEach(function(entry, i) {
             var isYou = parseInt(entry.user_id, 10) === currentUserId;
-            html += '<li class="leaderboard-item"' + (isYou ? ' style="background:var(--highlight);border-radius:10px;padding:0.75rem 1rem"' : '') + '>';
+            html += '<li class="leaderboard-item' + (isYou ? ' leaderboard-item--you' : '') + '">';
             html += '<span class="leaderboard-rank">' + (i + 1) + '</span>';
-            html += '<span class="leaderboard-name">' + escapeHtml(entry.username) + (isYou ? ' <span style="font-size:0.75rem;color:var(--muted)">(you)</span>' : '') + '</span>';
+            html += '<span class="leaderboard-name">' + escapeHtml(entry.username) + (isYou ? ' <span class="you-tag">(you)</span>' : '') + '</span>';
             html += '<span class="leaderboard-score">' + parseInt(entry.score, 10) + ' pts</span>';
-            html += '<span style="font-size:0.8rem;color:var(--muted);margin-left:0.5rem">' + parseFloat(entry.time_sec).toFixed(1) + 's</span>';
+            html += '<span class="leaderboard-time">' + parseFloat(entry.time_sec).toFixed(1) + 's</span>';
             html += '</li>';
         });
         html += '</ol>';
@@ -384,6 +380,17 @@ $messages = array_reverse($stmt->fetchAll());
             ROWS = 10;
         canvas.width = COLS * CELL;
         canvas.height = ROWS * CELL;
+
+
+        var playerImg = new Image();
+        var goalImg = new Image();
+        var imagesLoaded = 0;
+        playerImg.src = '/images/octopus.png';  
+        goalImg.src = '/images/octopuswoman.png';     
+        playerImg.onload = goalImg.onload = function() {
+        imagesLoaded++;
+        if (imagesLoaded === 2) resetGame(); 
+    };
 
         var maze, player, goal, moves, startTime, timerInterval, gameActive, gameStarted;
         var csrf = '<?= h(csrf_token()) ?>';
@@ -465,7 +472,7 @@ $messages = array_reverse($stmt->fetchAll());
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#333';
+            ctx.strokeStyle = '#88b8ce';
             ctx.lineWidth = 2;
             for (var r = 0; r < ROWS; r++) {
                 for (var c = 0; c < COLS; c++) {
@@ -498,14 +505,11 @@ $messages = array_reverse($stmt->fetchAll());
                     }
                 }
             }
-            ctx.fillStyle = '#c2410c';
-            ctx.beginPath();
-            ctx.arc(goal.c * CELL + CELL / 2, goal.r * CELL + CELL / 2, CELL / 4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#1d4ed8';
-            ctx.beginPath();
-            ctx.arc(player.c * CELL + CELL / 2, player.r * CELL + CELL / 2, CELL / 4, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.drawImage(goalImg, goal.c * CELL , goal.r * CELL , CELL , CELL );
+                ctx.drawImage(playerImg, player.c * CELL , player.r * CELL , CELL, CELL );
+
+
+
         }
 
         function move(dr, dc) {
@@ -587,33 +591,28 @@ $messages = array_reverse($stmt->fetchAll());
         document.addEventListener('keydown', function(e) {
             switch (e.key) {
                 case 'ArrowUp':
-                case 'w':
-                case 'W':
+                
                     e.preventDefault();
                     move(-1, 0);
                     break;
                 case 'ArrowDown':
-                case 's':
-                case 'S':
+                
                     e.preventDefault();
                     move(1, 0);
                     break;
                 case 'ArrowLeft':
-                case 'a':
-                case 'A':
+                
                     e.preventDefault();
                     move(0, -1);
                     break;
                 case 'ArrowRight':
-                case 'd':
-                case 'D':
+                
                     e.preventDefault();
                     move(0, 1);
                     break;
             }
         });
 
-        resetGame();
     })();
 </script>
 
@@ -670,11 +669,7 @@ $messages = array_reverse($stmt->fetchAll());
                     cell.dataset.r = r;
                     cell.dataset.c = c;
 
-                    // thicker borders around each 3x3 box
-                    if (c % 3 === 0) cell.style.borderLeftWidth = '2px';
-                    if (c === 8) cell.style.borderRightWidth = '2px';
-                    if (r % 3 === 0) cell.style.borderTopWidth = '2px';
-                    if (r === 8) cell.style.borderBottomWidth = '2px';
+                    // thicker 3x3 box borders are handled in style.css via :nth-child
 
                     if (val !== 0) {
                         cell.textContent = val;
@@ -702,13 +697,13 @@ $messages = array_reverse($stmt->fetchAll());
                 strikes++;
                 strikesEl.textContent = strikes;
                 selectedCell.textContent = '';
-                setStatus('Nope, that number is wrong.', '#b91c1c');
+                setStatus('Nope, that number is wrong.', '#a13a1e');
 
                 if (strikes >= 3) {
-                    setStatus('3 strikes - puzzle reset!', '#b91c1c');
+                    setStatus('3 strikes - puzzle reset!', '#a13a1e');
                     setTimeout(function() {
                         resetSudoku();
-                        setStatus('3 strikes - puzzle reset! Try again.', '#b91c1c');
+                        setStatus('3 strikes - puzzle reset! Try again.', '#a13a1e');
                     }, 700);
                 }
                 return;
@@ -775,10 +770,10 @@ $messages = array_reverse($stmt->fetchAll());
 
                     buildGrid(puzzle);
                     resetSudoku();
-                    setStatus('New puzzle loaded - good luck!', '#15803d');
+                    setStatus('New puzzle loaded', '#f1c166');
                 })
                 .catch(function() {
-                    setStatus('Could not load a new puzzle - hit Reset to try again.', '#b91c1c');
+                    setStatus('Could not load a new puzzle - hit Reset to try again.', '#a13a1e');
                 })
                 .then(function() {
                     loadingNewPuzzle = false;
@@ -800,11 +795,11 @@ $messages = array_reverse($stmt->fetchAll());
             });
 
             if (!complete) {
-                setStatus('Fill in every cell first.', '#b91c1c');
+                setStatus('Fill in every cell first.', '#a13a1e');
                 return;
             }
             if (!allCorrect) {
-                setStatus('Not quite - check for mistakes.', '#b91c1c');
+                setStatus('Not quite - check for mistakes.', '#a13a1e');
                 return;
             }
 

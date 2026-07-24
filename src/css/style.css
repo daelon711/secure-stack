@@ -1,20 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@400;600;700;800&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@100..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 :root {
-  --dirty-pink: #a15056;
-  --dirty-pink-dark: #9e7030;
-  --dirty-pink-light: #fde68a;
-  --cream: #fffbeb;
-  --bark: #912e4b;
-  --bark-light: #a0622a;
+  --espresso: #542916;
+  --eau-trouble: #b79858;
+  --terre-cuite: var(--terre-cuite);
+  --bleu-porcelaine: #88b8ce;
+  --bleu-porcelaine-light: #cfe4ec;
+  --nuage-de-lait: #fefaf0;
+  --miel-dore: #f1c166;
+
+  --accent: var(--bleu-porcelaine);         /* main accent: buttons, borders, sudoku grid, scores */
+  --accent-light: var(--bleu-porcelaine-light); /* light accent tint: input borders, chips, hovers */
+  --nav-bg: var(--espresso);                /* header/nav background + dark gradient stops */
+  --headline: var(--miel-dore);             /* logo + section headlines ("Maze", "Sudoku"...) */
+  --surface: var(--nuage-de-lait);          /* page/card base tint (inputs, hover rows, given cells) */
+  --text: var(--espresso);                  /* main body text color */
+  --text-muted: var(--eau-trouble);         /* secondary/muted text (labels, timestamps, subtitles) */
   --leaf: #4a7c59;
   --sky: #bae6fd;
-  --bright-red: #d95c4e;
-  --shadow: rgba(124, 74, 30, 0.18);
+  --danger: var(--terre-cuite);             /* delete/error/danger highlights */
+  --shadow: rgba(161, 58, 30, 0.18);        /* drop-shadow tint, terre-cuite based */
   --blue: #21739d;
+  --card-bg: rgba(254, 250, 240, 0.6);      /* translucent "glass" card background */
+  --glass-bg: rgba(254, 250, 240, 0.354);      /* translucent "glass" card background */
+  --danger-soft: rgba(161, 58, 30, 0.75);   /* logout/admin pill hover background */
+  --btn-text: rgba(255, 255, 255, 0.92);    /* light text on colored buttons */
+  --row-highlight: rgba(136, 184, 206, 0.28); /* "this is you" row tint on leaderboard */
 }
 
 *,
@@ -27,43 +41,41 @@
 
 body {
   font-family: "Outfit", sans-serif;
-  background-color: var(--cream);
+  background-color: var(--surface);
 
   background-image:
-    url("/../images/pink.PNG"), url("/../images/yellow-open.PNG"),
-    url("/../images/yellow-right.PNG"), url("/../images/winnie-butterfly.png"),
-    radial-gradient(circle at 20% 10%, #fde68a55 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, #f4a72a22 0%, transparent 40%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F4A72A' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    url("/../images/fishbirds.png"), url("/../images/octopus.png"),
+    radial-gradient(circle at 10% 80%, #88b8ce55 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, #fefaf0aa 0%, transparent 40%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2388B8CE' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 
   background-repeat:
-    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    no-repeat, no-repeat, no-repeat, no-repeat, repeat;
 
-  background-size: 150px, 110px, 150px, 240px, auto, auto, auto;
+  background-size: 150px, 240px, auto, auto, auto;
 
   background-position:
-    5% 36%,
-    90% 40%,
-    70% 85%,
+    3% 45%,
     5% 95%,
     20% 10%,
     80% 80%,
     0 0;
 
   min-height: 100vh;
-  color: var(--bark);
+  color: var(--text);
 }
 
-/* ── Layout ── */
+/* -- Layout -- */
 .container {
   max-width: 50rem;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
 }
 
-/* ── Dashboard grid (index.php) ── */
+/* -- Dashboard grid (index.php) -- */
 .container:has(.dashboard-grid) {
   max-width: 100rem;
+  padding: 0 clamp(1.5rem, 6vw, 5rem);
 }
 
 .dashboard-grid {
@@ -83,6 +95,7 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+
 }
 
 .dash-card-section .card {
@@ -103,6 +116,16 @@ body {
   overflow-y: auto;
 }
 
+#mazeCanvas {
+  border: 3px solid var(--accent);
+  border-radius: 12px;
+  max-width: 100%;
+  cursor: crosshair;
+  display: block;
+  background: rgba(249, 244, 223, 0.582);
+}
+
+
 @media (max-width: 980px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -112,7 +135,30 @@ body {
   }
 }
 
-/* ── Sudoku (tap-to-select grid + number palette) ── */
+/* -- Sudoku (tap-to-select grid + number palette) -- */
+
+
+
+
+#sudoku .card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+background-image: url("/images/marginsea.png");
+background-position: center bottom -27px;
+background-size: 25rem;
+background-repeat: no-repeat;  opacity: 0.4;     
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 980px) {
+  #sudoku .card::after {
+    background-size: 100%;
+    background-position: center bottom 0px;
+  }
+}
+
 .sudoku-board-wrap {
   display: flex;
   justify-content: center;
@@ -126,10 +172,10 @@ body {
   grid-template-rows: repeat(9, 1fr);
   width: 288px;
   height: 288px;
-  border: 3px solid var(--accent, var(--dirty-pink));
+  border: 3px solid var(--accent);
   border-radius: 12px;
   overflow: hidden;
-  background: #fff;
+  background: var(--card-bg);
   flex-shrink: 0;
 }
 
@@ -139,23 +185,33 @@ body {
   justify-content: center;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--bark);
+  color: var(--text);
   cursor: pointer;
   user-select: none;
-  border: 1px solid var(--dirty-pink-light);
-  background: #fff;
+  border: 1px solid var(--accent-light);
+  background: var(--card-bg);
   transition: 0.15s;
 }
+/* thicker borders around each 3x3 box (grid is 81 cells, row-major) */
+.sudoku-cell:nth-child(9n + 1) { border-left-width: 2px; }
+.sudoku-cell:nth-child(9n + 4) { border-left-width: 2px; }
+.sudoku-cell:nth-child(9n + 7) { border-left-width: 2px; }
+.sudoku-cell:nth-child(9n)     { border-right-width: 2px; }
+.sudoku-cell:nth-child(-n + 9)   { border-top-width: 2px; }
+.sudoku-cell:nth-child(n + 28):nth-child(-n + 36) { border-top-width: 2px; }
+.sudoku-cell:nth-child(n + 55):nth-child(-n + 63) { border-top-width: 2px; }
+.sudoku-cell:nth-child(n + 73)   { border-bottom-width: 2px; }
+
 .sudoku-cell.given {
-  background: var(--cream);
-  color: var(--bark-light);
+  background: var(--surface);
+  color: var(--text-muted);
   cursor: default;
 }
 .sudoku-cell.selected {
-  background: var(--dirty-pink-light);
+  background: var(--accent-light);
 }
 .sudoku-cell:not(.given):hover {
-  background: #fff7e0;
+  background: var(--card-bg);
 }
 
 .sudoku-palette {
@@ -168,26 +224,26 @@ body {
   width: 32px;
   height: 28px;
   border-radius: 7px;
-  border: 2px solid var(--dirty-pink);
-  background: #fff;
-  color: var(--bark);
+  border: 2px solid var(--accent);
+  background: var(--card-bg);
+  color: var(--text);
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
   transition: background 0.15s;
 }
 .sudoku-num-btn:hover {
-  background: var(--dirty-pink-light);
+  background: var(--accent-light);
 }
 .sudoku-erase-btn {
-  border-color: var(--bright-red);
-  color: var(--bright-red);
+  border-color: var(--danger);
+  color: var(--danger);
   margin-top: 0.2rem;
 }
 
-/* ── Header ── */
+/* -- Header -- */
 header {
-  background: var(--dirty-pink-dark);
+  background: var(--nav-bg);
   padding: 0.9rem 0;
   box-shadow: 0 4px 16px var(--shadow);
   position: sticky;
@@ -198,37 +254,32 @@ header .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 0.6rem;
+  max-width: 100rem;
+  margin: 0 4rem;
+  padding: 0 1rem;
 }
 .logo {
-  font-family: "Luckiest Guy", cursive;
-  font-size: 1.6rem;
-  color: #fff;
+font-family: "Comic Neue", cursive;
+  font-size: 2rem;
+  color: var(--card-bg);
   text-decoration: none;
+  font-weight: 900;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  color: var(--dirty-pink-light);
+  color: var(--headline);
   gap: 0.5rem;
   white-space: nowrap;
   transition:
     transform 0.15s,
     text-shadow 0.15s;
 }
-.logo span:hover {
-  font-size: 1.8rem;
-  transition:
-    transform 0.15s,
-    text-shadow 0.15s;
-  text-shadow: 2px 3px 0 var(--bark);
-}
+
 .logo:hover {
   transition:
     transform 0.15s,
     text-shadow 0.15s;
-  text-shadow: 2px 3px 0 var(--bark);
+  text-shadow: 2px 3px 20px var(--headline);
 }
 
 nav {
@@ -238,7 +289,7 @@ nav {
   flex-wrap: nowrap;
 }
 nav a {
-  color: #fff;
+  color: var(--miel-dore);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
@@ -248,61 +299,75 @@ nav a {
   transition:
     0.18s,
     transform 0.15s;
+
 }
 nav a:hover {
   background: rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
 }
 nav a.admin-link {
-  background: var(--bark);
+  background: var(--danger-soft);
+  color:var(--btn-text);
 }
-nav a.logout {
-  background: rgba(231, 76, 60, 0.7);
+nav a.logout:hover {
+  background: var(--danger-soft);
+  color:var(--btn-text);
 }
 
-/* ── Card ── */
+/* -- Card -- */
 .card {
-  background: #fff;
+  background: var(--card-bg);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   box-shadow:
     0 6px 28px var(--shadow),
-    0 0 0 3px var(--dirty-pink-light);
+    0 0 0 3px var(--accent-light);
   padding: 2rem;
   margin-bottom: 1.5rem;
   position: relative;
   overflow: hidden;
 }
-.card::before {
-  content: "";
+
+
+/* notes card */
+
+#notes .card::after{
+
+   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(
-    90deg,
-    var(--dirty-pink),
-    var(--dirty-pink-dark),
-    var(--dirty-pink)
-  );
+  inset: 0;
+background-image: url("/images/siren.png");
+background-position: center bottom 15rem;
+transform: scaleX(-1);
+background-size: 20rem;
+background-repeat: no-repeat;  
+opacity: 0.5;     
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* ── Page title ── */
+
+/* -- Page title -- */
 .page-title {
-  font-family: "Luckiest Guy", cursive;
+font-family: "Comic Neue", cursive;
   font-size: 2rem;
-  color: var(--dirty-pink-dark);
+  color: var(--headline);
   margin: 2rem 0 1.2rem;
   letter-spacing: 0.5px;
   font-weight: 600;
 }
 .page-subtitle {
-  color: var(--bark-light);
+  color: var(--text-muted);
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+.page-subtitle span{
+  color: var(--text);
 }
 
-/* ── Forms ── */
+/* -- Forms -- */
 .form-group {
   margin-bottom: 1.1rem;
 }
@@ -311,7 +376,7 @@ label {
   font-weight: 700;
   margin-bottom: 0.3rem;
   font-size: 0.9rem;
-  color: var(--bark);
+  color: var(--text);
 }
 input[type="text"],
 input[type="password"],
@@ -319,12 +384,12 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 2.5px solid var(--dirty-pink-light);
+  border: 2.5px solid var(--accent-light);
   border-radius: 12px;
   font-family: "Outfit", sans-serif;
   font-size: 1rem;
-  background: var(--cream);
-  color: var(--bark);
+  background: var(--surface);
+  color: var(--text);
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
@@ -332,11 +397,11 @@ textarea {
 }
 input:focus,
 textarea:focus {
-  border-color: var(--dirty-pink);
-  box-shadow: 0 0 0 3px var(--dirty-pink-light);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
 }
 
-/* ── Buttons ── */
+/* -- Buttons -- */
 .btn {
   display: inline-block;
   padding: 0.65rem 1.6rem;
@@ -361,21 +426,21 @@ textarea:focus {
 }
 
 .btn-primary {
-  background: var(--dirty-pink);
-  color: #fff;
+  background: var(--accent);
+  color: var(--btn-text);
 }
 .btn-danger {
-  background: var(--bright-red);
-  color: #fff;
+  background: var(--danger);
+  color: var(--card-bg);
 }
 .btn-success {
   background: var(--leaf);
-  color: #fff;
+  color: var(--card-bg);
 }
 .btn-outline {
   background: transparent;
-  border: 2.5px solid var(--dirty-pink);
-  color: var(--dirty-pink-dark);
+  border: 2.5px solid var(--accent);
+  color: var(--nav-bg);
 }
 .btn-sm {
   padding: 0.35rem 0.9rem;
@@ -387,7 +452,7 @@ textarea:focus {
   display: block;
 }
 
-/* ── Alerts ── */
+/* -- Alerts -- */
 .alert {
   padding: 0.8rem 1.2rem;
   border-radius: 12px;
@@ -397,7 +462,7 @@ textarea:focus {
 }
 .alert-error {
   background: #fee2e2;
-  color: #b91c1c;
+  color: var(--terre-cuite);
   border: 1.5px solid #fca5a5;
 }
 .alert-success {
@@ -406,12 +471,12 @@ textarea:focus {
   border: 1.5px solid #86efac;
 }
 .alert-info {
-  background: var(--dirty-pink-light);
-  color: var(--bark);
-  border: 1.5px solid var(--dirty-pink);
+  background: var(--accent-light);
+  color: var(--text);
+  border: 1.5px solid var(--accent);
 }
 
-/* ── Auth pages ── */
+/* -- Auth pages -- */
 .auth-wrap {
   display: flex;
   align-items: center;
@@ -420,11 +485,11 @@ textarea:focus {
   padding: 2rem;
 }
 .auth-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 24px;
   box-shadow:
     0 12px 48px var(--shadow),
-    0 0 0 3px var(--dirty-pink-light);
+    0 0 0 3px var(--accent-light);
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
@@ -432,20 +497,7 @@ textarea:focus {
   overflow: hidden;
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.auth-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(
-    90deg,
-    var(--dirty-pink),
-    var(--dirty-pink-dark),
-    var(--dirty-pink)
-  );
-}
+
 @keyframes popIn {
   from {
     opacity: 0;
@@ -457,12 +509,12 @@ textarea:focus {
   }
 }
 .auth-title {
-  font-family: "Luckiest Guy", cursive;
+font-family: "Comic Neue", cursive;
   font-size: 2.2rem;
-  color: var(--dirty-pink-dark);
+  color: var(--headline);
   text-align: center;
   margin-bottom: 0.3rem;
-  text-shadow: 1px 2px 0 var(--dirty-pink-light);
+  text-shadow: 1px 2px 0 var(--accent-light);
 }
 .auth-bee {
   font-size: 3rem;
@@ -486,11 +538,11 @@ textarea:focus {
   font-size: 0.9rem;
 }
 .auth-switch a {
-  color: var(--dirty-pink-dark);
+  color: var(--accent);
   font-weight: 700;
 }
 
-/* ── Notes list ── */
+/* -- Notes list -- */
 .note-form {
   display: flex;
   gap: 0.75rem;
@@ -508,15 +560,16 @@ textarea:focus {
   max-height: 380px;
   overflow-y: auto;
   padding-right: 4px;
+  z-index: 2;
 }
 .note-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--cream);
+  background: var(--glass-bg);
   border-radius: 14px;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--dirty-pink-light);
+  border: 2px solid var(--accent-light);
   transition: border-color 0.2s;
   animation: slideIn 0.25s ease;
 }
@@ -531,7 +584,7 @@ textarea:focus {
   }
 }
 .note-item:hover {
-  border-color: var(--dirty-pink);
+  border-color: var(--accent);
 }
 
 .note-text {
@@ -551,13 +604,13 @@ textarea:focus {
 }
 .note-delete:hover {
   opacity: 1;
-  color: var(--bright-red);
+  color: var(--danger);
 }
 
 .note-empty {
   text-align: center;
   padding: 2.5rem 1rem;
-  color: var(--bark-light);
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 .note-empty .bee {
@@ -566,7 +619,7 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
-/* ── Profile ── */
+/* -- Profile -- */
 
 .avatar-wrap {
   display: flex;
@@ -578,7 +631,7 @@ textarea:focus {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 4px solid var(--dirty-pink);
+  border: 4px solid var(--accent);
   object-fit: cover;
   box-shadow: 0 4px 16px var(--shadow);
   margin-bottom: 0.75rem;
@@ -587,8 +640,8 @@ textarea:focus {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  background: var(--dirty-pink-light);
-  border: 4px solid var(--dirty-pink);
+  background: var(--accent-light);
+  border: 4px solid var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -605,7 +658,7 @@ textarea:focus {
   margin-top: 0.4rem;
 }
 
-/* ── Admin table ── */
+/* -- Admin table -- */
 .table-wrap {
   overflow-x: auto;
   border-radius: 7px;
@@ -618,11 +671,11 @@ table {
 th {
   background: linear-gradient(
     135deg,
-    var(--dirty-pink),
-    var(--dirty-pink-dark)
+    var(--accent),
+    var(--nav-bg)
   );
-  color: #fff;
-  font-family: "Luckiest Guy", cursive;
+  color: var(--card-bg);
+font-family: "Comic Neue", cursive;
   font-weight: 500;
   letter-spacing: 0.5px;
   padding: 0.75rem 1rem;
@@ -630,14 +683,14 @@ th {
 }
 td {
   padding: 0.7rem 1rem;
-  border-bottom: 1.5px solid var(--dirty-pink-light);
+  border-bottom: 1.5px solid var(--accent-light);
   vertical-align: middle;
 }
 td span {
   max-width: 100%;
 }
 tr:hover td {
-  background: var(--cream);
+  background: var(--surface);
 }
 .badge {
   display: inline-block;
@@ -652,14 +705,11 @@ tr:hover td {
 }
 .badge-off {
   background: #fee2e2;
-  color: #b91c1c;
-}
-.badge-admin {
-  background: var(--dirty-pink-light);
-  color: var(--bark);
+  color: var(--terre-cuite);
 }
 
-/* ── Log table ── */
+
+/* -- Log table -- */
 .log-type {
   font-size: 0.75rem;
   font-weight: 700;
@@ -672,7 +722,7 @@ tr:hover td {
 }
 .log-LOGIN_FAIL {
   background: #fee2e2;
-  color: #b91c1c;
+  color: var(--terre-cuite);
 }
 .log-REGISTER {
   background: var(--sky);
@@ -683,8 +733,8 @@ tr:hover td {
   color: #6b7280;
 }
 .log-ADMIN_TOGGLE {
-  background: var(--dirty-pink-light);
-  color: var(--bark);
+  background: var(--accent-light);
+  color: var(--text);
 }
 .log-AVATAR_UPLOAD {
   background: #ede9fe;
@@ -695,7 +745,7 @@ tr:hover td {
   color: #be185d;
 }
 
-/* ── Misc ── */
+/* -- Misc -- */
 .mt1 {
   margin-top: 0.5rem;
 }
@@ -706,16 +756,105 @@ tr:hover td {
   text-align: center;
 }
 .text-muted {
-  color: var(--bark-light);
+  color: var(--text-muted);
   font-size: 0.88rem;
 }
-.dirty-pink-divider {
-  border: none;
-  border-top: 2px dashed var(--dirty-pink-light);
-  margin: 1.5rem 0;
+
+.mt-06 {
+  margin-top: 0.6rem;
+}
+.mt-08 {
+  margin-top: 0.8rem;
+}
+.ml-08 {
+  margin-left: 0.5rem;
+}
+.display-contents {
+  display: contents;
 }
 
-/* ── Chat ── */
+/* Honeypot fields - offscreen, bots fill them, humans never see them */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Generic "empty state" placeholder (no scores / no messages yet) */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+/* -- Dashboard page wrapper -- */
+.dashboard-container {
+  padding-top: 1.5rem;
+  margin-bottom: 5rem;
+}
+
+/* -- Games shared (Maze + Sudoku cards) -- */
+.card-center {
+  text-align: center;
+
+}
+
+.game-status {
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.game-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.8rem;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.stat-value {
+  font-size: 1.5rem;
+}
+.personal-best {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.sudoku-info {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.sudoku-status {
+  font-weight: 600;
+}
+.sudoku-stats-row {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 0.9rem;
+}
+
+/* -- Leaderboard "this is you" row + meta text -- */
+.leaderboard-item--you {
+  background: var(--row-highlight);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.you-tag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.leaderboard-time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+}
+
+/* -- Chat -- */
 .chat-messages {
   max-height: 30rem;
   overflow-y: auto;
@@ -735,17 +874,23 @@ tr:hover td {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: var(--dirty-pink-light);
+  background: var(--accent-light);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   flex-shrink: 0;
-  border: 2px solid var(--dirty-pink);
+  border: 2px solid var(--accent);
+}
+.chat-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .chat-bubble-body {
-  background: var(--cream);
-  border: 2px solid var(--dirty-pink-light);
+  background: var(--surface);
+  border: 2px solid var(--accent-light);
   border-radius: 14px;
   padding: 0.6rem 0.9rem;
   max-width: 80%;
@@ -753,7 +898,7 @@ tr:hover td {
 .chat-bubble-name {
   font-weight: 700;
   font-size: 0.82rem;
-  color: var(--dirty-pink-dark);
+  color: var(--accent);
 }
 .chat-bubble-text {
   font-size: 0.92rem;
@@ -762,7 +907,7 @@ tr:hover td {
 }
 .chat-bubble-time {
   font-size: 0.72rem;
-  color: var(--bark-light);
+  color: var(--text-muted);
   margin-top: 0.25rem;
 }
 .chat-form {
@@ -773,7 +918,7 @@ tr:hover td {
   flex: 1;
 }
 
-/* ── Leaderboard ── */
+/* -- Leaderboard -- */
 .leaderboard-list {
   list-style: none;
   padding: 0;
@@ -783,25 +928,25 @@ tr:hover td {
   align-items: center;
   gap: 0.8rem;
   padding: 0.65rem 0.5rem;
-  border-bottom: 1.5px solid var(--dirty-pink-light);
+  border-bottom: 1.5px solid var(--accent-light);
   transition: 0.15s;
 }
 .leaderboard-item:last-child {
   border-bottom: none;
 }
 .leaderboard-item:hover {
-  background: var(--cream);
+  background: var(--surface);
 }
 .leaderboard-rank {
-  font-family: "Luckiest Guy", cursive;
+font-family: "Comic Neue", cursive;
   font-size: 1.4rem;
-  color: var(--bark-light);
+  color: var(--text-muted);
   width: 2.2rem;
   text-align: center;
   flex-shrink: 0;
 }
 .leaderboard-rank.gold {
-  color: var(--dirty-pink);
+  color: var(--accent);
 }
 .leaderboard-rank.silver {
   color: #94a3b8;
@@ -816,227 +961,26 @@ tr:hover td {
 }
 .leaderboard-score {
   font-weight: 700;
-  color: var(--dirty-pink-dark);
+  color: var(--accent);
   font-size: 1.05rem;
 }
 
-/* ── dirty-pinkpot log types ── */
-.log-dirty-pinkPOT_FAKEADMIN_LOGIN {
-  background: #fef3c7;
-  color: #92400e;
-}
-.log-dirty-pinkPOT_L2_LOGIN {
-  background: #fee2e2;
-  color: #991b1b;
-}
+/* -- dirty-pinkpot log types -- */
+
+
 .log-ADMIN_ACCESS_DENIED {
   background: #fce7f3;
   color: #9d174d;
 }
-.log-fakeAdmin {
-  background: #fef3c7;
-  color: #92400e;
-}
-.log-dirty-pinkPotAdmin {
-  background: #fee2e2;
-  color: #991b1b;
-}
+
 .log-trap {
   background: #f3e8ff;
   color: #7c3aed;
 }
 
-/* ── dirty-pinkpot decoration ── */
-.dirty-pinkcomb-deco {
-  position: fixed;
-  right: -40px;
-  top: 30%;
-  font-size: 7rem;
-  opacity: 0.07;
-  pointer-events: none;
-  transform: rotate(15deg);
-}
 
-.pooh-chat-widget {
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 9999;
-}
 
-.pooh-chat-bubble {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--dirty-pink);
-  border: 3px solid var(--dirty-pink-light);
-  box-shadow: 0 8px 22px rgba(124, 74, 30, 0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  cursor: pointer;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    0.15s ease;
-}
 
-.pooh-chat-bubble:hover {
-  transform: translateY(-3px) scale(1.07);
-  box-shadow: 0 12px 30px rgba(124, 74, 30, 0.38);
-  background: var(--dirty-pink-dark);
-}
-
-.pooh-chat-bubble:hover img {
-  transform: rotate(-5deg) scale(1.08);
-}
-
-.pooh-chat-bubble img {
-  width: 52px;
-  height: 52px;
-  object-fit: contain;
-  transition: transform 0.15s ease;
-}
-
-.pooh-chat-panel {
-  display: none;
-  position: absolute;
-  right: 0;
-  bottom: 78px;
-  width: 330px;
-  height: 430px;
-  background: #fff;
-  border: 3px solid var(--dirty-pink-light);
-  border-radius: 20px;
-  box-shadow: 0 12px 36px rgba(124, 74, 30, 0.28);
-  overflow: hidden;
-}
-
-.pooh-chat-panel.open {
-  display: flex;
-  flex-direction: column;
-}
-
-.pooh-chat-header {
-  background: var(--dirty-pink-dark);
-  color: white;
-  padding: 0.8rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pooh-chat-header button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.pooh-chat-messages {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
-  background: var(--cream);
-}
-
-.pooh-msg {
-  max-width: 80%;
-  padding: 0.55rem 0.75rem;
-  border-radius: 14px;
-  margin-bottom: 0.6rem;
-  font-size: 0.9rem;
-}
-
-.pooh-msg.bot {
-  background: var(--dirty-pink-light);
-  color: var(--bark);
-}
-
-.pooh-msg.user {
-  background: var(--dirty-pink);
-  color: white;
-  margin-left: auto;
-}
-
-.pooh-chat-form {
-  display: flex;
-  gap: 0.4rem;
-  padding: 0.7rem;
-  border-top: 2px solid var(--dirty-pink-light);
-  background: white;
-}
-
-.pooh-chat-form input {
-  flex: 1;
-  font-size: 0.9rem;
-}
-
-.pooh-chat-form button {
-  border: none;
-  border-radius: 999px;
-  background: var(--dirty-pink);
-  color: white;
-  font-weight: 700;
-  padding: 0 0.9rem;
-}
-
-.pooh-typing {
-  opacity: 0.75;
-  font-style: italic;
-}
-
-.pooh-chat-notification {
-  position: absolute;
-  bottom: 16px;
-  right: 78px;
-  background: #fff;
-  color: var(--bark);
-  padding: 0.65rem 0.9rem;
-  border-radius: 18px 18px 4px 18px;
-  box-shadow: 0 8px 20px rgba(124, 74, 30, 0.22);
-  border: 2px solid var(--dirty-pink-light);
-  font-size: 0.85rem;
-  font-weight: 700;
-  white-space: nowrap;
-  animation: poohPop 0.4s ease;
-}
-
-.pooh-chat-notification::after {
-  content: "";
-  position: absolute;
-  right: -8px;
-  bottom: 14px;
-  width: 14px;
-  height: 14px;
-  background: #fff;
-  border-right: 2px solid var(--dirty-pink-light);
-  border-bottom: 2px solid var(--dirty-pink-light);
-  transform: rotate(-45deg);
-}
-
-@keyframes poohPop {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* mad riddles */
-@keyframes tigger-bounce {
-  from {
-    transform: translateY(0) rotate(-5deg);
-  }
-  to {
-    transform: translateY(-8px) rotate(5deg);
-  }
-}
 
 @keyframes blink {
   0%,
@@ -1048,373 +992,4 @@ tr:hover td {
   }
 }
 
-/* mad-hatter.php ---------------------------- */
 
-@keyframes tigger-bounce-top {
-  from {
-    transform: translateX(-50%) translateY(0) rotate(-6deg);
-  }
-  to {
-    transform: translateX(-50%) translateY(-10px) rotate(6deg);
-  }
-}
-
-@keyframes mh-blobwobble {
-  0%,
-  100% {
-    border-radius: 50% 40% 60% 45% / 45% 55% 40% 60%;
-  }
-  33% {
-    border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%;
-  }
-  66% {
-    border-radius: 60% 45% 55% 40% / 40% 60% 45% 55%;
-  }
-}
-
-.mh-hero {
-  text-align: center;
-  padding: 2.5rem 1rem 0.5rem;
-}
-
-.mh-hero-title {
-  font-family: "Luckiest Guy", cursive;
-  font-size: clamp(2rem, 6vw, 3.6rem);
-  color: var(--dirty-pink-dark);
-  text-shadow:
-    3px 4px 0 var(--dirty-pink-light),
-    5px 7px 0 rgba(124, 74, 30, 0.15);
-  line-height: 1.1;
-  letter-spacing: 1px;
-}
-
-.mh-responses {
-  max-width: 1200px;
-  margin: 1.2rem auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-}
-
-.mh-response-wrap {
-  position: relative;
-  padding-top: 4.5rem;
-}
-
-.mh-tigger-top {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 6rem;
-  height: 6rem;
-  object-fit: contain;
-  animation: tigger-bounce-top 0.65s ease-in-out infinite alternate;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.mh-response-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 0.9rem 1.2rem;
-  box-shadow: 0 4px 16px var(--shadow);
-  font-size: 0.88rem;
-  border-left: 5px solid var(--dirty-pink);
-}
-
-.mh-response-card.sqli-fake {
-  border-left-color: #e74c3c;
-  background: #1a1a1a;
-  color: #00ff88;
-  font-family: "Courier New", monospace;
-}
-.mh-response-card.sqli-fake .sqli-query-echo {
-  color: #ffdd57;
-  margin-bottom: 0.5rem;
-  font-size: 0.82rem;
-  word-break: break-all;
-}
-.mh-response-card.sqli-fake table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.76rem;
-  margin-top: 0.4rem;
-}
-.mh-response-card.sqli-fake th {
-  background: #2a2a2a;
-  color: #ff9f43;
-  padding: 0.3rem 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid #333;
-  white-space: nowrap;
-}
-.mh-response-card.sqli-fake td {
-  padding: 0.28rem 0.5rem;
-  border-bottom: 1px solid #2a2a2a;
-  color: #c8d6e5;
-}
-.mh-response-card.sqli-fake td.hash {
-  color: #576574;
-  font-size: 0.68rem;
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.mh-response-card.sqli-fake .sqli-footer {
-  margin-top: 0.4rem;
-  color: #576574;
-  font-size: 0.72rem;
-}
-
-.mh-response-card.sqli-tigger {
-  border-left-color: var(--dirty-pink);
-  text-align: center;
-  padding: 1.2rem;
-}
-.mh-response-card.sqli-tigger .tigger-msg {
-  font-family: "Luckiest Guy", cursive;
-  color: var(--dirty-pink-dark);
-  font-size: 1.1rem;
-}
-.mh-response-card.sqli-tigger .tigger-sub {
-  color: var(--bark-light);
-  font-size: 0.82rem;
-  margin-top: 0.3rem;
-}
-
-.mh-response-card.xss-blocked {
-  border-left-color: #f39c12;
-  background: #fffbf0;
-}
-.mh-response-card.xss-blocked .xss-oops {
-  font-size: 0.92rem;
-  color: var(--bark);
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-.mh-response-card.xss-blocked .xss-oops code {
-  font-family: monospace;
-  background: var(--dirty-pink-light);
-  padding: 0.1rem 0.4rem;
-  border-radius: 5px;
-  font-size: 0.88rem;
-  color: #c0392b;
-}
-.mh-response-card.xss-blocked .xss-payload {
-  font-family: monospace;
-  font-size: 0.8rem;
-  background: var(--dirty-pink-light);
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  word-break: break-all;
-  margin-top: 0.3rem;
-}
-.mh-response-card.xss-blocked .xss-note {
-  margin-top: 0.4rem;
-  font-size: 0.78rem;
-  color: var(--bark-light);
-}
-
-.mh-response-card.rce-blocked {
-  border-left-color: #8e44ad;
-  background: #f9f0ff;
-}
-.mh-response-card.rce-blocked .rce-msg {
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #6c3483;
-}
-
-.mh-response-card.echo-card {
-  border-left-color: var(--dirty-pink);
-}
-.mh-response-card.echo-card .echo-val {
-  font-family: monospace;
-  font-size: 0.82rem;
-  background: var(--dirty-pink-light);
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  word-break: break-all;
-  margin-top: 0.25rem;
-}
-
-.mh-bubble-canvas {
-  position: relative;
-  width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
-  min-height: 1250px;
-  padding: 1rem;
-}
-
-.mh-bubble {
-  position: absolute;
-  background: #fff;
-  border: 3px solid var(--dirty-pink);
-  border-radius: 50%;
-  box-shadow:
-    0 4px 18px var(--shadow),
-    inset 0 2px 6px rgba(244, 167, 42, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 1.2rem;
-  text-align: center;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    border-color 0.2s;
-  overflow: hidden;
-}
-.mh-bubble:hover {
-  transform: scale(1.04) rotate(-1deg) !important;
-  box-shadow:
-    0 8px 28px var(--shadow),
-    0 0 0 4px var(--dirty-pink-light);
-  border-color: var(--dirty-pink-dark);
-  z-index: 10;
-}
-.mh-bubble.small {
-  width: 150px;
-  height: 140px;
-}
-.mh-bubble.med {
-  width: 200px;
-  height: 185px;
-}
-.mh-bubble.wide {
-  width: 240px;
-  height: 170px;
-}
-
-.mh-bubble label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--bark);
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-  display: block;
-  cursor: pointer;
-}
-.mh-bubble input[type="text"],
-.mh-bubble input[type="password"] {
-  width: 88%;
-  border: 2px solid var(--dirty-pink-light);
-  border-radius: 999px;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.72rem;
-  font-family: "Nunito", sans-serif;
-  font-weight: 700;
-  color: var(--bark);
-  background: var(--cream);
-  text-align: center;
-  outline: none;
-  transition: border-color 0.18s;
-}
-.mh-bubble input:focus {
-  border-color: var(--dirty-pink-dark);
-  background: #fff;
-}
-
-.mh-bubble:nth-child(3n) {
-  transform: rotate(3deg);
-}
-.mh-bubble:nth-child(3n + 1) {
-  transform: rotate(-2deg);
-}
-.mh-bubble:nth-child(5n) {
-  transform: rotate(5deg);
-}
-.mh-bubble:nth-child(7n) {
-  transform: rotate(-4deg);
-}
-.mh-bubble:nth-child(4n) {
-  background: linear-gradient(135deg, #fff 60%, #fde68a44);
-}
-
-.mh-bubble.drip::after {
-  content: "";
-  position: absolute;
-  bottom: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 18px;
-  background: var(--dirty-pink-light);
-  border-radius: 0 0 50% 50%;
-  opacity: 0.7;
-}
-
-.mh-submit-zone {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.mh-submit-blob {
-  font-family: "Luckiest Guy", cursive;
-  font-size: 1.1rem;
-  background: linear-gradient(
-    135deg,
-    var(--dirty-pink) 0%,
-    var(--dirty-pink-dark) 100%
-  );
-  color: #fff;
-  border: none;
-  padding: 1.2rem 2rem;
-  border-radius: 50% 40% 60% 45% / 45% 55% 40% 60%;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(200, 120, 10, 0.4);
-  text-shadow: 1px 2px 0 var(--bark);
-  letter-spacing: 0.5px;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  animation: mh-blobwobble 3s ease-in-out infinite;
-}
-.mh-submit-blob:hover {
-  transform: scale(1.08);
-  box-shadow: 0 10px 30px rgba(200, 120, 10, 0.5);
-  animation-play-state: paused;
-}
-
-.mh-hp-trap {
-  opacity: 0;
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  height: 0;
-}
-
-@media (max-width: 700px) {
-  .mh-bubble-canvas {
-    min-height: unset;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-    padding: 1rem;
-  }
-  .mh-bubble {
-    position: static !important;
-    width: 90% !important;
-    height: auto !important;
-    border-radius: 20px !important;
-    padding: 1.2rem !important;
-    transform: none !important;
-  }
-  .mh-bubble input {
-    width: 100%;
-  }
-  .mh-submit-zone {
-    position: static;
-    text-align: center;
-    margin: 1.5rem auto;
-  }
-  .mh-responses {
-    padding: 0 0.8rem;
-  }
-}

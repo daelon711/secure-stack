@@ -5,19 +5,13 @@ mysql/.env
 # ---- User-uploaded content (avatars etc) ----
 src/uploads/*
 
-# ---- OS cruft ----
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# ---- Editor/IDE ----
-.vscode/
-.idea/
-*.swp
-
-# ---- PHP tooling  ----
-vendor/
-composer.lock
 
 # ---- Logs ----
 *.log
+
+# ---- tests ----
+evil.php
+zap*
+trivy/*
+*html
+*txt

@@ -9,5 +9,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /var/log/securestack && chown www-data:www-data /var/log/securestack
+
+USER www-data
 
 WORKDIR /usr/share/nginx/epiphany
