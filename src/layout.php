@@ -16,7 +16,7 @@ function start_page(string $title, bool $requireLogin = true): array
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title><?= h($title) ?> – Epiphany</title>
+        <title><?= h($title) ?> </title>
         <link rel="stylesheet" href="./css/style.css" />
     </head>
 

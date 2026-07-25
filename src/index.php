@@ -198,13 +198,13 @@ $messages = array_reverse($stmt->fetchAll());
 
             <!-- ============ NOTES ============ -->
             <section id="notes" class="dash-card-section dash-card-tall">
-                <h1 class="page-title">Today I learned ... </h1>
+                <h1 class="page-title">Today I realized ... </h1>
 
                 <div class="card">
                     <form method="POST" action="/index.php" class="note-form">
                         <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
                         <input type="hidden" name="action" value="add" />
-                        <input type="text" name="title" placeholder="Write a note to your future self..." maxlength="255" required />
+                        <input type="text" name="title" placeholder="Write a note of the day..." maxlength="255" required />
                         <button type="submit" class="btn btn-primary">+ Add</button>
                     </form>
 
@@ -266,7 +266,7 @@ $messages = array_reverse($stmt->fetchAll());
                     <div class="alert alert-error"><?= h($chatErr) ?></div>
                 <?php endif; ?>
 
-                <h1 class="page-title page-title-sm">Chat</h1>
+                <h1 class="page-title page-title-sm">Post it note</h1>
 
                 <div class="card">
                     <div class="chat-messages" id="chatMessages">
@@ -541,8 +541,8 @@ $messages = array_reverse($stmt->fetchAll());
                 clearInterval(timerInterval);
                 var timeSec = (Date.now() - startTime) / 1000;
                 var score = Math.max(1, Math.round(10000 / (moves + timeSec)));
-                document.getElementById('gameStatus').textContent = 'Reached the goal! Score: ' + score + ' pts (' + timeSec.toFixed(1) + 's)';
-                document.getElementById('gameStatus').style.color = '#15803d';
+                document.getElementById('gameStatus').textContent = 'Score: ' + score + ' pts ';
+                document.getElementById('gameStatus').style.color = '#4a7c59';
                 submitScore(score, timeSec);
             }
         }
@@ -583,7 +583,7 @@ $messages = array_reverse($stmt->fetchAll());
             gameStarted = false;
             document.getElementById('moves').textContent = '0';
             document.getElementById('timer').textContent = '0.0s';
-            document.getElementById('gameStatus').textContent = 'Press any arrow key to start!';
+            document.getElementById('gameStatus').textContent = 'Press any arrow key to start';
             document.getElementById('gameStatus').style.color = '';
             draw();
         };
@@ -806,7 +806,7 @@ $messages = array_reverse($stmt->fetchAll());
             clearInterval(timerInterval);
             var timeSec = (Date.now() - startTime) / 1000;
             var score = Math.max(1, Math.round(5000 / timeSec));
-            setStatus('Solved! Score: ' + score + ' pts - loading a new puzzle...', '#15803d');
+            setStatus('Score: ' + score + ' pts - loading a new puzzle...', '#4a7c59');
 
             var form = new FormData();
             form.append('csrf_token', csrf);
