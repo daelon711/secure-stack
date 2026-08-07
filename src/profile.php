@@ -116,7 +116,7 @@ $stmt = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 $stmt->execute([$user['id']]);
 $dbUser = $stmt->fetch();
 ?>
-<div class="container" style="padding-top:1.5rem">
+<div class="container container-top-pad">
     <?php if ($error):   ?><div class="alert alert-error"><?= h($error) ?></div><?php endif; ?>
     <?php if ($success): ?><div class="alert alert-success"><?= h($success) ?></div><?php endif; ?>
 
@@ -139,10 +139,10 @@ $dbUser = $stmt->fetch();
                 <label for="avatar">Upload new avatar <span class="text-muted">(JPEG/PNG/WebP, max 2 MB)</span></label>
                 <div class="btn-over">
                     <label for="avatar" class="btn btn-primary btn-sm">Choose File</label>
-                    <span id="file-name" class="text-muted" style="font-size:0.85rem;">No file chosen</span>
+                    <span id="file-name" class="text-muted file-name-label">No file chosen</span>
                 </div>
                 <input type="file" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp"
-                    style="padding:0.5rem; background:#fff;" onchange="document.getElementById('file-name').textContent = this.files[0]?.name || 'No file chosen'" />
+                    class="avatar-file-input" />
             </div>
             <button type="submit" class="btn btn-primary btn-sm">Upload Avatar</button>
         </form>
@@ -151,7 +151,7 @@ $dbUser = $stmt->fetch();
     <hr class="divider" />
 
     <div class="card">
-        <h2 style="margin-bottom:1rem;font-size:1.3rem">Update Details</h2>
+        <h2 class="section-heading">Update Details</h2>
         <form method="POST" action="/profile.php">
             <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
             <input type="hidden" name="action" value="update_profile" />
@@ -164,4 +164,5 @@ $dbUser = $stmt->fetch();
         </form>
     </div>
 </div>
+<script src="/js/profile.js"></script>
 <?php end_page(); ?>

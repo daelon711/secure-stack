@@ -15,3 +15,5 @@ zap*
 trivy/*
 *html
 *txt
+tests*
+nginx/certs/*

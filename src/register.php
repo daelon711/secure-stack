@@ -64,7 +64,7 @@ start_page('Register', false);
 <div class="auth-wrap">
     <div class="auth-card">
         <div class="auth-title">Create your account</div>
-        <p class="text-center text-muted" style="margin-bottom:1.5rem">Join Epiphany</p>
+        <p class="text-center text-muted mb-1-5">Join Epiphany</p>
 
         <?php if ($error): ?>
             <div class="alert alert-error"><?= h($error) ?></div>
@@ -77,7 +77,7 @@ start_page('Register', false);
 
         <form method="POST" action="/register.php" novalidate>
             <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
-            <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <div class="honeypot-field" aria-hidden="true">
                 <label for="company_url">Company URL</label>
                 <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off" />
             </div>
@@ -97,7 +97,7 @@ start_page('Register', false);
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
                     autocomplete="new-password" required maxlength="100" />
-                <small class="text-muted" style="margin-top:0.3rem;display:block">
+                <small class="text-muted mt-0-3-block">
                     Min <?= PASSWORD_MIN_LENGTH ?> characters, must include uppercase, lowercase, number &amp; special character
                 </small>
             </div>
@@ -106,7 +106,7 @@ start_page('Register', false);
                 <input type="password" id="password2" name="password2"
                     autocomplete="new-password" required maxlength="100" />
             </div>
-            <button type="submit" class="btn btn-primary btn-full" style="margin-top:0.5rem">
+            <button type="submit" class="btn btn-primary btn-full mt-0-5">
                 Create Account
             </button>
         </form>

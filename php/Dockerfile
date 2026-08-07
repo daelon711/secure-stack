@@ -1,6 +1,5 @@
 FROM php:8.5-fpm
 
-# gd needs these system libraries present *before* it can be compiled in
 RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -14,3 +13,5 @@ RUN mkdir -p /var/log/securestack && chown www-data:www-data /var/log/securestac
 USER www-data
 
 WORKDIR /usr/share/nginx/epiphany
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD php -r "exit(0);" || exit 1

@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@400;600;700;800&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@100..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Cantarell:ital,wght@0,400;0,700;1,400;1,700&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cantarell:ital,wght@0,400;0,700;1,400;1,700&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 
 :root {
   --espresso: #542916;
@@ -13,23 +13,48 @@
   --nuage-de-lait: #fefaf0;
   --miel-dore: #f1c166;
 
-  --accent: var(--bleu-porcelaine);         /* main accent: buttons, borders, sudoku grid, scores */
-  --accent-light: var(--bleu-porcelaine-light); /* light accent tint: input borders, chips, hovers */
-  --nav-bg: var(--espresso);                /* header/nav background + dark gradient stops */
-  --headline: var(--miel-dore);             /* logo + section headlines ("Maze", "Sudoku"...) */
-  --surface: var(--nuage-de-lait);          /* page/card base tint (inputs, hover rows, given cells) */
-  --text: var(--espresso);                  /* main body text color */
-  --text-muted: var(--eau-trouble);         /* secondary/muted text (labels, timestamps, subtitles) */
+  --accent: var(
+    --bleu-porcelaine
+  ); /* main accent: buttons, borders, sudoku grid, scores */
+  --accent-light: var(
+    --bleu-porcelaine-light
+  ); /* light accent tint: input borders, chips, hovers */
+  --nav-bg: var(--espresso); /* header/nav background + dark gradient stops */
+  --headline: var(
+    --miel-dore
+  ); /* logo + section headlines ("Maze", "Sudoku"...) */
+  --surface: var(
+    --nuage-de-lait
+  ); /* page/card base tint (inputs, hover rows, given cells) */
+  --text: var(--espresso); /* main body text color */
+  --text-muted: var(
+    --eau-trouble
+  ); /* secondary/muted text (labels, timestamps, subtitles) */
   --leaf: #4a7c59;
   --sky: #bae6fd;
-  --danger: var(--terre-cuite);             /* delete/error/danger highlights */
-  --shadow: rgba(161, 58, 30, 0.18);        /* drop-shadow tint, terre-cuite based */
+  --danger: var(--terre-cuite); /* delete/error/danger highlights */
+  --shadow: rgba(161, 58, 30, 0.18); /* drop-shadow tint, terre-cuite based */
   --blue: #21739d;
-  --card-bg: rgba(254, 250, 240, 0.6);      /* translucent "glass" card background */
-  --glass-bg: rgba(254, 250, 240, 0.354);      /* translucent "glass" card background */
-  --danger-soft: rgba(161, 58, 30, 0.75);   /* logout/admin pill hover background */
-  --btn-text: rgba(255, 255, 255, 0.92);    /* light text on colored buttons */
-  --row-highlight: rgba(136, 184, 206, 0.28); /* "this is you" row tint on leaderboard */
+  --card-bg: rgba(254, 250, 240, 0.6); /* translucent "glass" card background */
+  --glass-bg: rgba(
+    254,
+    250,
+    240,
+    0.354
+  ); /* translucent "glass" card background */
+  --danger-soft: rgba(
+    161,
+    58,
+    30,
+    0.75
+  ); /* logout/admin pill hover background */
+  --btn-text: rgba(255, 255, 255, 0.92); /* light text on colored buttons */
+  --row-highlight: rgba(
+    136,
+    184,
+    206,
+    0.28
+  ); /* "this is you" row tint on leaderboard */
 }
 
 *,
@@ -45,15 +70,19 @@ body {
   background-color: var(--surface);
 
   background-image:
-    url("/../images/fishbirds.png"), url("/../images/octopus.png"), url("../images/bubbles2.png"),
+    url("/../images/fishbirds.png"), url("/../images/octopus.png"),
+    url("../images/bubbles2.png"),
     radial-gradient(circle at 10% 80%, #88b8ce55 0%, transparent 40%),
     radial-gradient(circle at 80% 80%, #fefaf0aa 0%, transparent 40%),
     url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2388B8CE' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 
   background-repeat:
-    no-repeat, no-repeat, no-repeat, no-repeat,no-repeat, repeat;
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
 
   background-size: 150px, 240px, 200px, auto, auto, auto;
+
+  cursor: url("../cursors/left_ptr.png"), auto;
+  /* cursor: url("../cursors/pointing_hand.png"), pointer; */
 
   background-position:
     3% 45%,
@@ -65,6 +94,19 @@ body {
 
   min-height: 100vh;
   color: var(--text);
+}
+
+input,
+textarea,
+button,
+.btn,
+.logo {
+  cursor: url("../cursors/pointing_hand.png"), pointer;
+}
+
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
 }
 
 /* -- Layout -- */
@@ -97,7 +139,6 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-
 }
 
 .dash-card-section .card {
@@ -120,13 +161,13 @@ body {
 
 #mazeCanvas {
   border: 3px solid var(--accent);
+  margin: 0 auto;
   border-radius: 12px;
   max-width: 100%;
-  cursor: crosshair;
   display: block;
   background: rgba(249, 244, 223, 0.582);
+  cursor: url("../cursors/pointing_hand.png"), pointer;
 }
-
 
 @media (max-width: 980px) {
   .dashboard-grid {
@@ -139,19 +180,18 @@ body {
 
 /* -- Sudoku (tap-to-select grid + number palette) -- */
 
-
-
-
 #sudoku .card::after {
   content: "";
   position: absolute;
   inset: 0;
-background-image: url("/images/marginsea.png");
-background-position: center bottom -27px;
-background-size: 25rem;
-background-repeat: no-repeat;  opacity: 0.4;     
+  background-image: url("/images/marginsea.png");
+  background-position: center bottom -27px;
+  background-size: 25rem;
+  background-repeat: no-repeat;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 0;
+  cursor: url("../cursors/pointing_hand.png"), pointer;
 }
 
 @media (max-width: 980px) {
@@ -195,14 +235,30 @@ background-repeat: no-repeat;  opacity: 0.4;
   transition: 0.15s;
 }
 /* thicker borders around each 3x3 box (grid is 81 cells, row-major) */
-.sudoku-cell:nth-child(9n + 1) { border-left-width: 2px; }
-.sudoku-cell:nth-child(9n + 4) { border-left-width: 2px; }
-.sudoku-cell:nth-child(9n + 7) { border-left-width: 2px; }
-.sudoku-cell:nth-child(9n)     { border-right-width: 2px; }
-.sudoku-cell:nth-child(-n + 9)   { border-top-width: 2px; }
-.sudoku-cell:nth-child(n + 28):nth-child(-n + 36) { border-top-width: 2px; }
-.sudoku-cell:nth-child(n + 55):nth-child(-n + 63) { border-top-width: 2px; }
-.sudoku-cell:nth-child(n + 73)   { border-bottom-width: 2px; }
+.sudoku-cell:nth-child(9n + 1) {
+  border-left-width: 2px;
+}
+.sudoku-cell:nth-child(9n + 4) {
+  border-left-width: 2px;
+}
+.sudoku-cell:nth-child(9n + 7) {
+  border-left-width: 2px;
+}
+.sudoku-cell:nth-child(9n) {
+  border-right-width: 2px;
+}
+.sudoku-cell:nth-child(-n + 9) {
+  border-top-width: 2px;
+}
+.sudoku-cell:nth-child(n + 28):nth-child(-n + 36) {
+  border-top-width: 2px;
+}
+.sudoku-cell:nth-child(n + 55):nth-child(-n + 63) {
+  border-top-width: 2px;
+}
+.sudoku-cell:nth-child(n + 73) {
+  border-bottom-width: 2px;
+}
 
 .sudoku-cell.given {
   background: var(--surface);
@@ -245,54 +301,67 @@ background-repeat: no-repeat;  opacity: 0.4;
 
 /* -- Header -- */
 header {
-  background: var(--nav-bg);
   padding: 0.9rem 0;
-    margin-bottom:2rem;
+  margin-bottom: 2rem;
 
-  box-shadow: 0 4px 16px var(--shadow);
   position: sticky;
   top: 0;
   z-index: 100;
-
-  background-image: url("../images/marginblue.png");
-  background-position: center left 20px ;
-  background-size: 3rem;
-background-repeat: no-repeat; 
-
-
 }
 
-header::after {
-  content: "";
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%) scaleX(-1);
-  width: 3rem;
-  height: 3rem;
-  background-image: url("../images/marginblue.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+.header-left img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
+.header-right img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  transform: scaleX(-1);
+}
+
+.header-left,
+.header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 0 auto; /* don't grow */
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  background: #fdf1dbb1;
+  padding: 1.2rem 1.5rem;
+  border-radius: 20px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  background: #fdf1dbbe;
+  padding: 1.38rem 1.5rem;
+  border-radius: 20px;
+}
 
 header .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 100rem;
-  margin: 0 4rem;
-  padding: 0 1rem;
-
- 
+  margin: -1rem -0.5rem;
 }
 .logo {
-font-family: "Cantarell", cursive;
+  font-family: "Cantarell", cursive;
   font-size: 2rem;
   color: var(--card-bg);
   text-decoration: none;
-  /* font-weight: 900; */
+  font-weight: 900;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
@@ -302,8 +371,6 @@ font-family: "Cantarell", cursive;
   transition:
     transform 0.15s,
     text-shadow 0.15s;
-
-
 }
 
 .logo:hover {
@@ -313,13 +380,42 @@ font-family: "Cantarell", cursive;
   text-shadow: 2px 3px 20px var(--headline);
 }
 
+.navbar-date {
+  justify-self: center;
+  color: var(--headline);
+  font-size: 1.2rem;
+  white-space: nowrap;
+  position: absolute;
+  top: 2rem;
+  left: 10rem;
+  right: 10rem;
+}
+.divider {
+  justify-self: center;
+  color: var(--headline);
+  white-space: nowrap;
+  position: absolute;
+  left: 10rem;
+  right: 10rem;
+
+  height: 5rem;
+}
+
+.divider svg {
+  display: block;
+  width: 20rem;
+  height: auto;
+}
+
+.divider path {
+  fill: var(--bleu-porcelaine);
+}
+
 nav {
   display: flex;
   gap: 0.5rem;
   align-items: space-between;
   flex-wrap: nowrap;
-
- 
 }
 nav a {
   color: var(--miel-dore);
@@ -332,19 +428,18 @@ nav a {
   transition:
     0.18s,
     transform 0.15s;
-
 }
 nav a:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--bleu-porcelaine-light);
   transform: translateY(-1px);
 }
 nav a.admin-link {
   background: var(--danger-soft);
-  color:var(--btn-text);
+  color: var(--btn-text);
 }
 nav a.logout:hover {
   background: var(--danger-soft);
-  color:var(--btn-text);
+  color: var(--btn-text);
 }
 
 /* -- Card -- */
@@ -362,31 +457,28 @@ nav a.logout:hover {
   overflow: hidden;
 }
 
-
 /* notes card */
 
-#notes .card::after{
-
-   content: "";
+#notes .card::after {
+  content: "";
   position: absolute;
   inset: 0;
-background-image: url("/images/siren.png");
-background-position: center bottom 15rem;
-transform: scaleX(-1);
-background-size: 20rem;
-background-repeat: no-repeat;  
-opacity: 0.5;     
+  background-image: url("/images/siren.png");
+  background-position: center bottom 15rem;
+  transform: scaleX(-1);
+  background-size: 20rem;
+  background-repeat: no-repeat;
+  opacity: 0.5;
   pointer-events: none;
   z-index: 0;
 }
 
-
 /* -- Page title -- */
 .page-title {
-font-family: "Cantarell", cursive;
+  font-family: "Cantarell", cursive;
   font-size: 2rem;
   color: var(--headline);
-  margin: 2rem 0 1.2rem;
+  margin: 2rem 0 1.7rem;
   letter-spacing: 0.5px;
   /* font-weight: 600; */
 }
@@ -396,7 +488,7 @@ font-family: "Cantarell", cursive;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
-.page-subtitle span{
+.page-subtitle span {
   color: var(--text);
 }
 
@@ -542,7 +634,7 @@ textarea:focus {
   }
 }
 .auth-title {
-font-family: "Cantarell", cursive;
+  font-family: "Cantarell", cursive;
   font-size: 2.2rem;
   color: var(--headline);
   text-align: center;
@@ -702,13 +794,9 @@ table {
   font-size: 0.92rem;
 }
 th {
-  background: linear-gradient(
-    135deg,
-    var(--accent),
-    var(--nav-bg)
-  );
+  background: linear-gradient(135deg, var(--accent), var(--nav-bg));
   color: var(--card-bg);
-font-family: "Cantarell", cursive;
+  font-family: "Cantarell", cursive;
   /* font-weight: 500; */
   letter-spacing: 0.5px;
   padding: 0.75rem 1rem;
@@ -740,7 +828,6 @@ tr:hover td {
   background: #fee2e2;
   color: var(--terre-cuite);
 }
-
 
 /* -- Log table -- */
 .log-type {
@@ -828,7 +915,6 @@ tr:hover td {
 /* -- Games shared (Maze + Sudoku cards) -- */
 .card-center {
   text-align: center;
-
 }
 
 .game-status {
@@ -971,7 +1057,7 @@ tr:hover td {
   background: var(--surface);
 }
 .leaderboard-rank {
-font-family: "Cantarell", cursive;
+  font-family: "Cantarell", cursive;
   font-size: 1.4rem;
   color: var(--text-muted);
   width: 2.2rem;
@@ -1000,7 +1086,6 @@ font-family: "Cantarell", cursive;
 
 /* -- dirty-pinkpot log types -- */
 
-
 .log-ADMIN_ACCESS_DENIED {
   background: #fce7f3;
   color: #9d174d;
@@ -1010,10 +1095,6 @@ font-family: "Cantarell", cursive;
   background: #f3e8ff;
   color: #7c3aed;
 }
-
-
-
-
 
 @keyframes blink {
   0%,
@@ -1025,4 +1106,324 @@ font-family: "Cantarell", cursive;
   }
 }
 
+/* ============================================================
+   CSP-compliant utility classes
+   These replace inline style="..." attributes that were silently
+   dropped once a strict Content-Security-Policy (style-src 'self')
+   was added in Phase 2 - style-src only permits styles loaded from
+   real stylesheets, not inline attributes.
+   ============================================================ */
 
+.mb-1-5 {
+  margin-bottom: 1.5rem;
+}
+.mt-0-5 {
+  margin-top: 0.5rem;
+}
+.mt-0-3-block {
+  margin-top: 0.3rem;
+  display: block;
+}
+.container-top-pad {
+  padding-top: 1.5rem;
+}
+.file-name-label {
+  font-size: 0.85rem;
+}
+.avatar-file-input {
+  padding: 0.5rem;
+  background: #fff;
+}
+.section-heading {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+/* honeypot fields - offscreen, bots fill them, humans never see them */
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
+}
+
+/* game status colors, set via class toggle instead of inline style.color */
+.game-status--win {
+  color: #4a7c59;
+}
+.sudoku-status--ok {
+  color: #4a7c59;
+}
+.sudoku-status--error {
+  color: #a13a1e;
+}
+
+/* leaderboard tab active state, set via class toggle instead of inline style */
+.tab-link.is-active {
+  font-weight: 700;
+}
+.tab-link {
+  font-weight: 400;
+}
+
+.section-header-row {
+  display: flex;
+  padding-bottom: 0.5rem;
+  flex-direction: column;
+}
+
+.streak-badge {
+  color: var(--bleu-porcelaine);
+  font-size: 0.95rem;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
+.page-title-notes {
+  margin-bottom: 0;
+}
+
+/* envelope */
+
+.note-list-wrap {
+  /* margin-top: 0.6rem; */
+}
+
+.note-env-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.9rem;
+  max-height: 440px;
+  overflow-y: visible;
+  padding-right: 4px;
+}
+
+.note-env-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-env-card {
+  position: relative;
+  cursor: pointer;
+  border-radius: 30px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+  overflow: visible;
+  opacity: 0.8;
+}
+
+/* hover: lift + blue glow shadow */
+.note-env-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 14px 30px rgba(136, 184, 206, 0.6);
+  opacity: 1;
+}
+
+/* the ornate border image fills the card */
+.note-env-img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* date + delete pinned to bottom-centre of the card */
+.note-env-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0rem;
+  pointer-events: none;
+}
+
+.note-env-date {
+  font-family: "Playpen Sans Thai", "Comic Neue", cursive;
+  font-size: 0.72rem;
+  color: var(--bleu-porcelaine);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* trash icon — re-enable pointer events just for this button */
+.note-env-delete {
+  pointer-events: all;
+  background: none;
+  border: none;
+  font-size: 0.78rem;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+  line-height: 1;
+}
+.note-env-delete:hover {
+  opacity: 1;
+  background: rgba(161, 58, 30, 0.1);
+}
+
+/* -- modal overlay ---------------------------------------------- */
+.note-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(84, 41, 22, 0);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: background 0.25s ease;
+}
+
+.note-overlay--open {
+  background: rgba(84, 41, 22, 0.42);
+  pointer-events: all;
+}
+
+/* modal box */
+.note-modal {
+  position: relative;
+  width: min(52vw, 680px);
+  opacity: 0;
+  transform: scale(0.87);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  pointer-events: none;
+}
+.note-overlay--open .note-modal {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+/* landscape image — shown on desktop */
+.note-modal-img--landscape {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  pointer-events: none;
+  user-select: none;
+}
+/* portrait image — hidden on desktop, shown on mobile */
+.note-modal-img--portrait {
+  display: none;
+}
+
+/* text area positioned over the ornate border's inner empty field */
+.note-modal-inner {
+  position: absolute;
+  top: 20%;
+  left: 18%;
+  right: 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 0.5rem;
+}
+
+/* date top-left, time top-right */
+.note-modal-date-left,
+.note-modal-date-right {
+  position: absolute;
+  top: 0;
+  font-family: "Playpen Sans Thai", "Comic Neue", cursive;
+  font-size: 0.68rem;
+  color: var(--bleu-porcelaine);
+  white-space: nowrap;
+}
+.note-modal-date-left {
+  left: 0;
+}
+.note-modal-date-right {
+  right: 0;
+}
+
+.note-modal-text {
+  margin: 3rem auto;
+  font-family: "Playpen Sans Thai", "Comic Neue", cursive;
+  font-size: 0.92rem;
+  color: var(--espresso);
+  text-align: center;
+  line-height: 1.55;
+  word-break: break-word;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* close × button */
+.note-modal-close {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  border: 2px solid var(--bleu-porcelaine);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+}
+.note-modal-close:hover {
+  background: var(--accent-light);
+  box-shadow: 0 0 8px rgba(136, 184, 206, 0.5);
+}
+
+/* prevent body scroll while modal open */
+body.note-modal-open {
+  overflow: hidden;
+}
+
+/* -- mobile: portrait image + full-width modal ------------------ */
+@media (max-width: 600px) {
+  .note-env-list {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .note-modal {
+    width: 88vw;
+  }
+
+  .note-modal-img--landscape {
+    display: none;
+  }
+  .note-modal-img--portrait {
+    display: block;
+    width: 100%;
+    border-radius: 14px;
+    pointer-events: none;
+    user-select: none;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .note-modal-inner {
+    top: 16%;
+    left: 14%;
+    right: 14%;
+    bottom: 10%;
+  }
+}
+
+.visually-hidden {
+  display: none;
+}

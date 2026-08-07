@@ -70,7 +70,7 @@ start_page('Log in', false);
 <div class="auth-wrap">
     <div class="auth-card">
         <div class="auth-title">Welcome back</div>
-        <p class="text-center text-muted" style="margin-bottom:1.5rem">Log in to Epiphany</p>
+        <p class="text-center text-muted mb-1-5">Log in to Epiphany</p>
 
         <?php if ($error): ?>
             <div class="alert alert-error"><?= h($error) ?></div>
@@ -79,7 +79,7 @@ start_page('Log in', false);
         <form method="POST" action="/login.php" novalidate>
             <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
             <!-- Honeypot field - offscreen, bots fill it, humans can't see it -->
-            <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <div class="honeypot-field" aria-hidden="true">
                 <label for="website">Website</label>
                 <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
             </div>
@@ -94,7 +94,7 @@ start_page('Log in', false);
                 <input type="password" id="password" name="password"
                     autocomplete="current-password" required maxlength="100" />
             </div>
-            <button type="submit" class="btn btn-primary btn-full" style="margin-top:0.5rem">
+            <button type="submit" class="btn btn-primary btn-full mt-0-5">
                 Log in
             </button>
         </form>

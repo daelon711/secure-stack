@@ -10,12 +10,19 @@ if (empty($_SESSION['user'])) {
 
 $error = '';
 
-// ---- POST handling (notes CRUD only - games/chat post to their own endpoints) ----
+// ---- POST handling — now returns JSON when called via AJAX ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) session_start();
     $user = require_login();
 
+    $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
+
     if (!verify_csrf($_POST['csrf_token'] ?? '')) {
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Invalid request.']);
+            exit;
+        }
         $error = 'Invalid request.';
     } else {
         $action = $_POST['action'] ?? '';
@@ -23,20 +30,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'add') {
             $title = trim($_POST['title'] ?? '');
             if ($title === '') {
-                $error = 'Note cannot be empty.';
+                $errMsg = 'Note cannot be empty.';
             } elseif (strlen($title) > 255) {
-                $error = 'Note is too long (max 255 chars).';
+                $errMsg = 'Note is too long (max 255 chars).';
             } else {
                 $stmt = db()->prepare('INSERT INTO notes (user_id, title) VALUES (?, ?)');
                 $stmt->execute([$user['id'], $title]);
+                $errMsg = '';
             }
         } elseif ($action === 'delete') {
             $id = (int)($_POST['note_id'] ?? 0);
             $stmt = db()->prepare('DELETE FROM notes WHERE id = ? AND user_id = ?');
             $stmt->execute([$id, $user['id']]);
+            $errMsg = '';
         } else {
-            $error = 'Unknown action.';
-            log_honeypot($error, 'trap', ['action' => $action]);
+            $errMsg = 'Unknown action.';
+            log_honeypot($errMsg, 'trap', ['action' => $action]);
+        }
+
+        if ($isAjax) {
+            // Return fresh notes list + streak so JS can re-render without reload
+            if (!empty($errMsg)) {
+                header('Content-Type: application/json');
+                echo json_encode(['error' => $errMsg]);
+                exit;
+            }
+            $stmt = db()->prepare('SELECT id, title, created_at FROM notes WHERE user_id = ? ORDER BY created_at DESC');
+            $stmt->execute([$user['id']]);
+            $freshNotes = $stmt->fetchAll();
+
+            $stmt = db()->prepare('SELECT DISTINCT DATE(created_at) AS note_date FROM notes WHERE user_id = ? ORDER BY note_date DESC');
+            $stmt->execute([$user['id']]);
+            $noteDates = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $streak = 0;
+            if (!empty($noteDates)) {
+                $mostRecent = new DateTime($noteDates[0]);
+                $today      = new DateTime('today');
+                $yesterday  = (clone $today)->modify('-1 day');
+                if ($mostRecent == $today || $mostRecent == $yesterday) {
+                    $streak = 1;
+                    $expected = clone $mostRecent;
+                    for ($i = 1; $i < count($noteDates); $i++) {
+                        $expected->modify('-1 day');
+                        if (new DateTime($noteDates[$i]) == $expected) $streak++;
+                        else break;
+                    }
+                }
+            }
+            header('Content-Type: application/json');
+            echo json_encode(['notes' => $freshNotes, 'streak' => $streak]);
+            exit;
         }
     }
 
@@ -52,17 +95,42 @@ if (isset($_GET['err'])) $error = $_GET['err'];
 $chatErr = '';
 if (isset($_GET['chat_err'])) {
     $chatErr = match ($_GET['chat_err']) {
-        'empty'          => 'Message cannot be empty.',
-        'too_long'       => 'Message is too long (max 500 characters).',
+        'empty'           => 'Message cannot be empty.',
+        'too_long'        => 'Message is too long (max 500 characters).',
         'invalid_request' => 'Invalid request.',
-        default          => 'Something went wrong.',
+        default           => 'Something went wrong.',
     };
 }
 
 // ---- Notes ----
-$stmt = db()->prepare('SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC');
+$stmt = db()->prepare('SELECT id, title, created_at FROM notes WHERE user_id = ? ORDER BY created_at DESC');
 $stmt->execute([$user['id']]);
 $notes = $stmt->fetchAll();
+
+// ---- Notes streak ----
+$stmt = db()->prepare('SELECT DISTINCT DATE(created_at) AS note_date FROM notes WHERE user_id = ? ORDER BY note_date DESC');
+$stmt->execute([$user['id']]);
+$noteDates = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+$streak = 0;
+if (!empty($noteDates)) {
+    $mostRecent = new DateTime($noteDates[0]);
+    $today      = new DateTime('today');
+    $yesterday  = (clone $today)->modify('-1 day');
+
+    if ($mostRecent == $today || $mostRecent == $yesterday) {
+        $streak = 1;
+        $expected = clone $mostRecent;
+        for ($i = 1; $i < count($noteDates); $i++) {
+            $expected->modify('-1 day');
+            if (new DateTime($noteDates[$i]) == $expected) {
+                $streak++;
+            } else {
+                break;
+            }
+        }
+    }
+}
 
 $quotes = [
     'Small steps still move you forward.',
@@ -72,7 +140,7 @@ $quotes = [
 ];
 $dailyQuote = $quotes[date('z') % count($quotes)];
 
-// ---- Personal best per game (for the games section) ----
+// ---- Personal best per game ----
 $stmt = db()->prepare('SELECT MAX(score) as best, MIN(time_sec) as fastest FROM game_scores WHERE user_id = ? AND game = ?');
 $stmt->execute([$user['id'], 'maze']);
 $mazePersonal = $stmt->fetch();
@@ -81,14 +149,13 @@ $stmt = db()->prepare('SELECT MAX(score) as best, MIN(time_sec) as fastest, COUN
 $stmt->execute([$user['id'], 'sudoku']);
 $sudokuPersonal = $stmt->fetch();
 
-// Sudoku puzzle: pulled from the free Dosuku API ( config.php)
-// falling back to a hardcoded puzzle if the API is unreachable
+// Sudoku puzzle
 $sudokuGame = get_sudoku_api();
 $puzzle     = $sudokuGame['puzzle'];
 $solution   = $sudokuGame['solution'];
 $difficulty = $sudokuGame['difficulty'];
 
-// ---- Leaderboard (maze only - Scores card shows maze scores) ----
+// ---- Leaderboard ----
 $boards = [];
 foreach (['maze'] as $g) {
     $stmt = db()->prepare(
@@ -157,12 +224,12 @@ $messages = array_reverse($stmt->fetchAll());
                     <?php endif; ?>
 
                     <div class="mt2">
-                        <button onclick="resetGame()" class="btn btn-outline btn-sm">New Maze</button>
+                        <button id="newMazeBtn" class="btn btn-outline btn-sm">New Maze</button>
                     </div>
                 </div>
             </section>
 
-            <!-- ============ SCORES / LEADERBOARD (maze only) ============ -->
+            <!-- ============ SCORES / LEADERBOARD ============ -->
             <section id="leaderboard" class="dash-card-section">
                 <h1 class="page-title page-title-sm">Scores</h1>
 
@@ -198,7 +265,10 @@ $messages = array_reverse($stmt->fetchAll());
 
             <!-- ============ NOTES ============ -->
             <section id="notes" class="dash-card-section dash-card-tall">
-                <h1 class="page-title">Today I realized ... </h1>
+                <div class="section-header-row">
+                    <h1 class="page-title page-title-notes">Today I realized ... </h1>
+                    <p class="streak-badge">journaling streak: <?= (int)$streak ?> day<?= $streak === 1 ? '' : 's' ?></p>
+                </div>
 
                 <div class="card">
                     <form method="POST" action="/index.php" class="note-form">
@@ -208,24 +278,8 @@ $messages = array_reverse($stmt->fetchAll());
                         <button type="submit" class="btn btn-primary">+ Add</button>
                     </form>
 
-                    <?php if (empty($notes)): ?>
-                        <div class="note-empty">No notes yet.</div>
-                    <?php else: ?>
-                        <ul class="note-list">
-                            <?php foreach ($notes as $note): ?>
-                                <li class="note-item">
-                                    <span class="note-text"><?= h($note['title']) ?></span>
-
-                                    <form method="POST" action="/index.php" class="display-contents">
-                                        <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>" />
-                                        <input type="hidden" name="action" value="delete" />
-                                        <input type="hidden" name="note_id" value="<?= $note['id'] ?>" />
-                                        <button type="submit" class="note-delete" title="Delete">🗑</button>
-                                    </form>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php endif; ?>
+                    <!-- JS renders envelope cards into this div — no page reload -->
+                    <div class="note-list-wrap"></div>
                 </div>
             </section>
 
@@ -249,12 +303,11 @@ $messages = array_reverse($stmt->fetchAll());
                         <span>Strikes: <span id="sudokuStrikes">0</span>/3</span>
                     </div>
                     <div class="mt-08">
-                        <button onclick="checkSudoku()" class="btn btn-primary btn-sm">Check</button>
-                        <button onclick="loadNewPuzzle()" class="btn btn-outline btn-sm ml-08">Refresh</button>
+                        <button id="checkSudokuBtn" class="btn btn-primary btn-sm">Check</button>
+                        <button id="refreshSudokuBtn" class="btn btn-outline btn-sm ml-08">Refresh</button>
                     </div>
                     <div class="sudoku-info">
                         <p class="page-subtitle" id="sudokuDifficulty">difficulty: <span><?= h($difficulty) ?></span></p>
-
                         <p>You've completed <?= (int)($sudokuPersonal['completed'] ?? 0) ?> sudoku game<?= ((int)($sudokuPersonal['completed'] ?? 0) === 1) ? '' : 's' ?>.</p>
                     </div>
                 </div>
@@ -311,516 +364,19 @@ $messages = array_reverse($stmt->fetchAll());
 
 </div>
 
-<script>
-    // ---- chat: scroll to bottom ----
-    var c = document.getElementById('chatMessages');
-    if (c) c.scrollTop = c.scrollHeight;
+<div id="app-data" class="visually-hidden"
+     data-csrf="<?= h(csrf_token()) ?>"
+     data-puzzle="<?= h(json_encode($puzzle)) ?>"
+     data-solution="<?= h(json_encode($solution)) ?>"></div>
 
-    // ---- leaderboard: tab toggle ----
-    function showBoard(game) {
-        document.querySelector('.board-maze').style.display = game === 'maze' ? '' : 'none';
-        document.querySelector('.board-sudoku').style.display = game === 'sudoku' ? '' : 'none';
-        document.getElementById('tabMaze').style.fontWeight = game === 'maze' ? '700' : '400';
-        document.getElementById('tabSudoku').style.fontWeight = game === 'sudoku' ? '700' : '400';
-    }
+<!-- notes data - read by notes.js via .dataset, never a <script> element so CSP's script-src never evaluates it -->
+<div id="notes-data" class="visually-hidden"
+     data-csrf="<?= h(csrf_token()) ?>"
+     data-notes="<?= h(json_encode($notes)) ?>"
+     data-streak="<?= h((string)$streak) ?>"></div>
 
-    // ---- leaderboard: live refresh (auto-poll + refresh right after a score is submitted) ----
-    function escapeHtml(s) {
-        var d = document.createElement('div');
-        d.innerText = s == null ? '' : String(s);
-        return d.innerHTML;
-    }
-
-    function renderBoard(game, entries, currentUserId) {
-        var container = document.querySelector('.board-' + game);
-        if (!container) return;
-        if (!entries || !entries.length) {
-            container.innerHTML = '<div class="empty-state">No scores yet! Be the first to play.</div>';
-            return;
-        }
-        var html = '<ol class="leaderboard-list">';
-        entries.forEach(function(entry, i) {
-            var isYou = parseInt(entry.user_id, 10) === currentUserId;
-            html += '<li class="leaderboard-item' + (isYou ? ' leaderboard-item--you' : '') + '">';
-            html += '<span class="leaderboard-rank">' + (i + 1) + '</span>';
-            html += '<span class="leaderboard-name">' + escapeHtml(entry.username) + (isYou ? ' <span class="you-tag">(you)</span>' : '') + '</span>';
-            html += '<span class="leaderboard-score">' + parseInt(entry.score, 10) + ' pts</span>';
-            html += '<span class="leaderboard-time">' + parseFloat(entry.time_sec).toFixed(1) + 's</span>';
-            html += '</li>';
-        });
-        html += '</ol>';
-        container.innerHTML = html;
-    }
-
-    function refreshLeaderboard() {
-        fetch('/leaderboard.php?format=json')
-            .then(function(r) {
-                return r.json();
-            })
-            .then(function(data) {
-                renderBoard('maze', data.boards.maze, data.current_user_id);
-                renderBoard('sudoku', data.boards.sudoku, data.current_user_id);
-            })
-            .catch(function() {
-                /* silent - stale board is fine, next poll will fix it */
-            });
-    }
-
-    // auto-refresh every 8s, same idea as the old project
-    setInterval(refreshLeaderboard, 8000);
-</script>
-
-<!-- ============ MAZE GAME LOGIC ============ -->
-<script>
-    (function() {
-        var canvas = document.getElementById('mazeCanvas');
-        var ctx = canvas.getContext('2d');
-        var CELL = 36,
-            COLS = 10,
-            ROWS = 10;
-        canvas.width = COLS * CELL;
-        canvas.height = ROWS * CELL;
-
-
-        var playerImg = new Image();
-        var goalImg = new Image();
-        var imagesLoaded = 0;
-        playerImg.src = '/images/octopus.png';  
-        goalImg.src = '/images/octopuswoman.png';     
-        playerImg.onload = goalImg.onload = function() {
-        imagesLoaded++;
-        if (imagesLoaded === 2) resetGame(); 
-    };
-
-        var maze, player, goal, moves, startTime, timerInterval, gameActive, gameStarted;
-        var csrf = '<?= h(csrf_token()) ?>';
-
-        function initMaze() {
-            maze = [];
-            for (var r = 0; r < ROWS; r++) {
-                maze[r] = [];
-                for (var c = 0; c < COLS; c++) {
-                    maze[r][c] = {
-                        top: true,
-                        right: true,
-                        bottom: true,
-                        left: true,
-                        visited: false
-                    };
-                }
-            }
-            var stack = [{
-                r: 0,
-                c: 0
-            }];
-            maze[0][0].visited = true;
-
-            while (stack.length > 0) {
-                var cur = stack[stack.length - 1];
-                var neighbors = [];
-                var dirs = [{
-                        dr: -1,
-                        dc: 0,
-                        wall: 'top',
-                        opp: 'bottom'
-                    },
-                    {
-                        dr: 1,
-                        dc: 0,
-                        wall: 'bottom',
-                        opp: 'top'
-                    },
-                    {
-                        dr: 0,
-                        dc: -1,
-                        wall: 'left',
-                        opp: 'right'
-                    },
-                    {
-                        dr: 0,
-                        dc: 1,
-                        wall: 'right',
-                        opp: 'left'
-                    }
-                ];
-                for (var i = 0; i < dirs.length; i++) {
-                    var nr = cur.r + dirs[i].dr,
-                        nc = cur.c + dirs[i].dc;
-                    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && !maze[nr][nc].visited) {
-                        neighbors.push({
-                            r: nr,
-                            c: nc,
-                            wall: dirs[i].wall,
-                            opp: dirs[i].opp
-                        });
-                    }
-                }
-                if (neighbors.length > 0) {
-                    var next = neighbors[Math.floor(Math.random() * neighbors.length)];
-                    maze[cur.r][cur.c][next.wall] = false;
-                    maze[next.r][next.c][next.opp] = false;
-                    maze[next.r][next.c].visited = true;
-                    stack.push({
-                        r: next.r,
-                        c: next.c
-                    });
-                } else {
-                    stack.pop();
-                }
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#88b8ce';
-            ctx.lineWidth = 2;
-            for (var r = 0; r < ROWS; r++) {
-                for (var c = 0; c < COLS; c++) {
-                    var x = c * CELL,
-                        y = r * CELL;
-                    var cell = maze[r][c];
-                    if (cell.top) {
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-                        ctx.lineTo(x + CELL, y);
-                        ctx.stroke();
-                    }
-                    if (cell.right) {
-                        ctx.beginPath();
-                        ctx.moveTo(x + CELL, y);
-                        ctx.lineTo(x + CELL, y + CELL);
-                        ctx.stroke();
-                    }
-                    if (cell.bottom) {
-                        ctx.beginPath();
-                        ctx.moveTo(x, y + CELL);
-                        ctx.lineTo(x + CELL, y + CELL);
-                        ctx.stroke();
-                    }
-                    if (cell.left) {
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-                        ctx.lineTo(x, y + CELL);
-                        ctx.stroke();
-                    }
-                }
-            }
-                ctx.drawImage(goalImg, goal.c * CELL , goal.r * CELL , CELL , CELL );
-                ctx.drawImage(playerImg, player.c * CELL , player.r * CELL , CELL, CELL );
-
-
-
-        }
-
-        function move(dr, dc) {
-            if (!gameActive) return;
-            if (!gameStarted) {
-                gameStarted = true;
-                startTime = Date.now();
-                timerInterval = setInterval(updateTimer, 100);
-            }
-
-            var cell = maze[player.r][player.c];
-            var nr = player.r + dr,
-                nc = player.c + dc;
-
-            if (dr === -1 && cell.top) return;
-            if (dr === 1 && cell.bottom) return;
-            if (dc === -1 && cell.left) return;
-            if (dc === 1 && cell.right) return;
-            if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return;
-
-            player.r = nr;
-            player.c = nc;
-            moves++;
-            document.getElementById('moves').textContent = moves;
-            draw();
-
-            if (player.r === goal.r && player.c === goal.c) {
-                gameActive = false;
-                clearInterval(timerInterval);
-                var timeSec = (Date.now() - startTime) / 1000;
-                var score = Math.max(1, Math.round(10000 / (moves + timeSec)));
-                document.getElementById('gameStatus').textContent = 'Score: ' + score + ' pts ';
-                document.getElementById('gameStatus').style.color = '#4a7c59';
-                submitScore(score, timeSec);
-            }
-        }
-
-        function updateTimer() {
-            if (startTime) {
-                document.getElementById('timer').textContent = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
-            }
-        }
-
-        function submitScore(score, timeSec) {
-            var form = new FormData();
-            form.append('csrf_token', csrf);
-            form.append('score', score);
-            form.append('time_sec', timeSec.toFixed(2));
-            fetch('/maze.php', {
-                method: 'POST',
-                body: form
-            }).then(function() {
-                refreshLeaderboard();
-            });
-        }
-
-        window.resetGame = function() {
-            clearInterval(timerInterval);
-            initMaze();
-            player = {
-                r: 0,
-                c: 0
-            };
-            goal = {
-                r: ROWS - 1,
-                c: COLS - 1
-            };
-            moves = 0;
-            startTime = null;
-            gameActive = true;
-            gameStarted = false;
-            document.getElementById('moves').textContent = '0';
-            document.getElementById('timer').textContent = '0.0s';
-            document.getElementById('gameStatus').textContent = 'Press any arrow key to start';
-            document.getElementById('gameStatus').style.color = '';
-            draw();
-        };
-
-        document.addEventListener('keydown', function(e) {
-            switch (e.key) {
-                case 'ArrowUp':
-                
-                    e.preventDefault();
-                    move(-1, 0);
-                    break;
-                case 'ArrowDown':
-                
-                    e.preventDefault();
-                    move(1, 0);
-                    break;
-                case 'ArrowLeft':
-                
-                    e.preventDefault();
-                    move(0, -1);
-                    break;
-                case 'ArrowRight':
-                
-                    e.preventDefault();
-                    move(0, 1);
-                    break;
-            }
-        });
-
-    })();
-</script>
-
-<!-- ============ SUDOKU GAME LOGIC ============ -->
-<script>
-    (function() {
-        var csrf = '<?= h(csrf_token()) ?>';
-        var grid = document.getElementById('sudokuGrid');
-        var palette = document.getElementById('sudokuPalette');
-        var statusEl = document.getElementById('sudokuStatus');
-        var strikesEl = document.getElementById('sudokuStrikes');
-        var timerEl = document.getElementById('sudokuTimer');
-
-        // puzzle/solution come from the Dosuku API via PHP (config.php -> get_sudoku_api())
-        var puzzle = <?= json_encode($puzzle) ?>;
-        var solution = <?= json_encode($solution) ?>;
-
-        var startTime = null;
-        var timerInterval = null;
-        var sudokuStarted = false;
-        var selectedCell = null;
-        var strikes = 0;
-        var loadingNewPuzzle = false;
-
-        function setStatus(msg, color) {
-            statusEl.textContent = msg || '';
-            statusEl.style.color = color || '';
-        }
-
-        function startSudokuTimer() {
-            if (sudokuStarted) return;
-            sudokuStarted = true;
-            startTime = Date.now();
-            timerInterval = setInterval(function() {
-                timerEl.textContent = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
-            }, 100);
-        }
-
-        function selectCell(cell) {
-            if (selectedCell) selectedCell.classList.remove('selected');
-            selectedCell = cell;
-            selectedCell.classList.add('selected');
-        }
-
-        // ---- build the 9x9 tap-to-select grid from a puzzle array ----
-        function buildGrid(puzzleGrid) {
-            grid.innerHTML = '';
-            selectedCell = null;
-            for (var r = 0; r < 9; r++) {
-                for (var c = 0; c < 9; c++) {
-                    var val = puzzleGrid[r][c];
-                    var cell = document.createElement('div');
-                    cell.className = 'sudoku-cell';
-                    cell.dataset.r = r;
-                    cell.dataset.c = c;
-
-                    // thicker 3x3 box borders are handled in style.css via :nth-child
-
-                    if (val !== 0) {
-                        cell.textContent = val;
-                        cell.classList.add('given');
-                    } else {
-                        cell.addEventListener('click', function() {
-                            selectCell(this);
-                        });
-                    }
-                    grid.appendChild(cell);
-                }
-            }
-        }
-        buildGrid(puzzle);
-
-        // ---- number palette (built once - just swaps the grid underneath it) ----
-        function handleNumberTap(n) {
-            if (!selectedCell || loadingNewPuzzle) return;
-            startSudokuTimer();
-
-            var r = +selectedCell.dataset.r,
-                c = +selectedCell.dataset.c;
-
-            if (solution[r][c] !== n) {
-                strikes++;
-                strikesEl.textContent = strikes;
-                selectedCell.textContent = '';
-                setStatus('Nope, that number is wrong.', '#a13a1e');
-
-                if (strikes >= 3) {
-                    setStatus('3 strikes - puzzle reset!', '#a13a1e');
-                    setTimeout(function() {
-                        resetSudoku();
-                        setStatus('3 strikes - puzzle reset! Try again.', '#a13a1e');
-                    }, 700);
-                }
-                return;
-            }
-
-            selectedCell.textContent = n;
-            setStatus('', '');
-        }
-
-        for (var n = 1; n <= 9; n++) {
-            (function(n) {
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'sudoku-num-btn';
-                btn.textContent = n;
-                btn.addEventListener('click', function() {
-                    handleNumberTap(n);
-                });
-                palette.appendChild(btn);
-            })(n);
-        }
-
-        var eraseBtn = document.createElement('button');
-        eraseBtn.type = 'button';
-        eraseBtn.className = 'sudoku-num-btn sudoku-erase-btn';
-        eraseBtn.textContent = '×';
-        eraseBtn.title = 'Clear cell';
-        eraseBtn.addEventListener('click', function() {
-            if (!selectedCell) return;
-            selectedCell.textContent = '';
-        });
-        palette.appendChild(eraseBtn);
-
-        // ---- reset the CURRENT puzzle (same clues, blank entries) ----
-        // used by the Reset button and automatically after 3 strikes
-        function resetSudoku() {
-            clearInterval(timerInterval);
-            sudokuStarted = false;
-            startTime = null;
-            strikes = 0;
-            strikesEl.textContent = '0';
-            timerEl.textContent = '0.0s';
-            setStatus('', '');
-            grid.querySelectorAll('.sudoku-cell:not(.given)').forEach(function(cell) {
-                cell.textContent = '';
-                cell.classList.remove('selected');
-            });
-            selectedCell = null;
-        }
-        window.resetSudoku = resetSudoku;
-
-        // ---- fetch a brand new puzzle from the API (used after a win) ----
-        function loadNewPuzzle() {
-            loadingNewPuzzle = true;
-            var difficultyEl = document.getElementById('sudokuDifficulty');
-            fetch('/sudoku_api.php')
-                .then(function(r) {
-                    return r.json();
-                })
-                .then(function(data) {
-                    puzzle = data.puzzle;
-                    solution = data.solution;
-                    difficultyEl.textContent = data.difficulty;
-
-                    buildGrid(puzzle);
-                    resetSudoku();
-                    setStatus('New puzzle loaded', '#f1c166');
-                })
-                .catch(function() {
-                    setStatus('Could not load a new puzzle - hit Reset to try again.', '#a13a1e');
-                })
-                .then(function() {
-                    loadingNewPuzzle = false;
-                });
-        }
-        window.loadNewPuzzle = loadNewPuzzle;
-
-        // ---- Check button: board must be completely filled, then verified ----
-        window.checkSudoku = function() {
-            var cells = grid.querySelectorAll('.sudoku-cell');
-            var complete = true;
-            var allCorrect = true;
-            cells.forEach(function(cell) {
-                var r = +cell.dataset.r,
-                    c = +cell.dataset.c;
-                var val = parseInt(cell.textContent) || 0;
-                if (val === 0) complete = false;
-                else if (val !== solution[r][c]) allCorrect = false;
-            });
-
-            if (!complete) {
-                setStatus('Fill in every cell first.', '#a13a1e');
-                return;
-            }
-            if (!allCorrect) {
-                setStatus('Not quite - check for mistakes.', '#a13a1e');
-                return;
-            }
-
-            clearInterval(timerInterval);
-            var timeSec = (Date.now() - startTime) / 1000;
-            var score = Math.max(1, Math.round(5000 / timeSec));
-            setStatus('Score: ' + score + ' pts - loading a new puzzle...', '#4a7c59');
-
-            var form = new FormData();
-            form.append('csrf_token', csrf);
-            form.append('score', score);
-            form.append('time_sec', timeSec.toFixed(2));
-            fetch('/sudoku.php', {
-                method: 'POST',
-                body: form
-            }).then(function() {
-                refreshLeaderboard();
-            });
-
-            loadNewPuzzle();
-        };
-    })();
-</script>
+<script src="/js/app.js"></script>
+<script src="/js/maze.js"></script>
+<script src="/js/sudoku.js"></script>
+<script src="/js/notes.js"></script>
 <?php end_page(); ?>
